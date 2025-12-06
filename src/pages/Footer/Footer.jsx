@@ -3,7 +3,10 @@ import logo from '../../assets/contesthub.png';
 
 const Footer = () => {
   return (
-    <footer className="footer footer-horizontal footer-center bg-black rounded-2xl text-primary-content p-10">
+    <footer
+      className="footer footer-horizontal footer-center bg-gradient-to-br from-gray-800 via-gray-900 to-gray-800
+ bg-opacity-50 text-primary-content p-10 mt-5"
+    >
       <aside>
         <img className="h-14 rounded-full" src={logo} alt="" />
         <h1 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-blue-900 to-sky-400">
@@ -12,8 +15,6 @@ const Footer = () => {
             Hub
           </span>
         </h1>
-        
-        <p className="font-bold">Providing reliable tech since 1992</p>
         <p>Copyright © {new Date().getFullYear()} - All right reserved</p>
       </aside>
       <nav>
