@@ -1,94 +1,108 @@
-import React from 'react';
-import logo from '../../assets/contesthub.png';
-import { NavLink } from 'react-router';
-import { IoHome } from 'react-icons/io5';
-import { FaInfoCircle, FaTasks } from 'react-icons/fa';
-import { MdLeaderboard } from 'react-icons/md';
-import { GiProgression } from 'react-icons/gi';
-import { HiMenuAlt2 } from 'react-icons/hi';
+import { MdOutlineMenu } from 'react-icons/md';
+import Logo from '../../assets/contesthub.png'
+import { Link, NavLink } from 'react-router';
+import useAuth from '../../hooks/useAuth';
+import useSingleUser from '../../hooks/useSingleUser';
+import { toast } from 'react-toastify';
+import Navlinks from './NavLinks';
+const Navbar = () => {
+  const { user, logOut } = useAuth();
+  const { userData, isLoading } = useSingleUser();
 
-const NavBar = () => {
-  const links = (
-    <>
-      <li className="font-bold">
-        <NavLink className="flex items-center hover:text-yellow-600 transition">
-          <IoHome />
-          Home
-        </NavLink>
-      </li>
-      <li className="font-bold ">
-        <NavLink
-          to="/all-contests"
-          className="flex items-center hover:text-yellow-600 transition"
-        >
-          <FaTasks />
-          All Contest
-        </NavLink>
-      </li>
-      <li className="font-bold ">
-        <NavLink
-          to="/leaderboard"
-          className="flex items-center hover:text-yellow-600 transition"
-        >
-          <MdLeaderboard />
-          Leaderboard
-        </NavLink>
-      </li>
-      <li className="font-bold ">
-        <NavLink
-          to="/progress"
-          className="flex items-center hover:text-yellow-600 transition"
-        >
-          <GiProgression />
-          Progress
-        </NavLink>
-      </li>
-      <li className="font-bold ">
-        <NavLink
-          to="/about"
-          className="flex items-center hover:text-yellow-600 transition"
-        >
-          <FaInfoCircle />
-          About
-        </NavLink>
-      </li>
-    </>
-  );
+  const handleLogout = () => {
+    logOut()
+      .then(() => {
+        toast.success('Logout successfully!');
+      })
+      .catch(err => {
+        toast.error(err.message);
+      });
+  };
   return (
-    <div className="navbar bg-base-100 shadow-sm px-5">
-      <div className="navbar-start">
-        <div className="dropdown">
-          <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden ">
-            <HiMenuAlt2 className="text-2xl" />
+    <div className="bg-[#a8dadc]">
+      <div className="navbar  max-w-screen-xl mx-auto">
+        <div className="navbar-start">
+          <div className="dropdown">
+            <label tabIndex={0} className="btn btn-ghost lg:hidden">
+              <MdOutlineMenu className="text-3xl"></MdOutlineMenu>
+            </label>
+            <ul
+              tabIndex={0}
+              className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
+            >
+              <Navlinks></Navlinks>
+            </ul>
           </div>
-          <ul
-            tabIndex="-1"
-            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
-          >
-            {links}
+          <Logo></Logo>
+        </div>
+        <div className="navbar-center hidden lg:flex">
+          <ul className="menu menu-horizontal px-1">
+            <Navlinks></Navlinks>
           </ul>
         </div>
-        <div className="flex justify-center items-center gap-1">
-          <img className="h-10 rounded-full" src={logo} alt="" />
-          <NavLink
-            to="/"
-            className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-blue-900 to-sky-400"
-          >
-            Contest
-            <span className="text-blue-500 text-transparent bg-clip-text bg-gradient-to-br from-amber-600 to-amber-300 font-bold">
-              Hub
-            </span>
-          </NavLink>
+        <div className="navbar-end">
+          {user?.email ? (
+            <div className="dropdown dropdown-end">
+              <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
+                <div className="w-10 rounded-full">
+                  <img
+                    alt="user"
+                    src={
+                      user?.photoURL
+                        ? user?.photoURL
+                        : 'https://i.ibb.co/z6BC8H5/default-profile.png'
+                    }
+                  />
+                </div>
+              </label>
+              <ul
+                tabIndex={0}
+                className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52 space-y-3"
+              >
+                <li className="ml-2 text-green-700">{user?.displayName}</li>
+                {isLoading ? (
+                  <div>loading...</div>
+                ) : (
+                  <li>
+                    <NavLink
+                      className={({ isActive }) =>
+                        isActive
+                          ? 'md:text-[#e63946]  border border-[#e63946]'
+                          : 'text-gray-800'
+                      }
+                      to={
+                        (userData?.role === 'guest' &&
+                          '/dashboard/myParticipatedContest') ||
+                        (userData?.role === 'creator' &&
+                          '/dashboard/myContest') ||
+                        (userData?.role === 'admin' && '/dashboard/manageUsers')
+                      }
+                    >
+                      <button>Dashboard</button>
+                    </NavLink>
+                  </li>
+                )}
+                <li>
+                  <button
+                    onClick={handleLogout}
+                    className="btn btn-sm btn-outline btn-warning mt-1"
+                  >
+                    Logout
+                  </button>
+                </li>
+              </ul>
+            </div>
+          ) : (
+            <Link to="/login">
+              <button className="btn btn-sm md:btn-md text-white outline-none border-none bg-[#e63946] hover:bg-[#eb5763]">
+                Login
+              </button>
+            </Link>
+          )}
         </div>
-      </div>
-      <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1">{links}</ul>
-      </div>
-      <div className="navbar-end">
-        <a className="btn">Button</a>
       </div>
     </div>
   );
 };
 
-export default NavBar;
+export default Navbar;

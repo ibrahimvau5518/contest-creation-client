@@ -1,8 +1,7 @@
-
-import { NavLink } from "react-router-dom";
-import { FaHouse, FaLightbulb, FaTrophy } from "react-icons/fa6";
-import { GiProgression } from "react-icons/gi";
-import { FcAbout } from "react-icons/fc";
+import { NavLink } from 'react-router';
+import { FaHouse, FaLightbulb, FaTrophy } from 'react-icons/fa6';
+import { GiProgression } from 'react-icons/gi';
+import { FcAbout } from 'react-icons/fc';
 const Navlinks = () => {
   return (
     <>
@@ -10,8 +9,8 @@ const Navlinks = () => {
         <NavLink
           className={({ isActive }) =>
             isActive
-              ? "md:text-xl font-bold text-[#e63946]  border border-[#e63946]"
-              : "text-gray-800 font-bold md:text-lg"
+              ? 'md:text-xl font-bold text-[#e63946]  border border-[#e63946]'
+              : 'text-gray-800 font-bold md:text-lg'
           }
           to="/"
         >
@@ -23,8 +22,8 @@ const Navlinks = () => {
         <NavLink
           className={({ isActive }) =>
             isActive
-              ? "md:text-xl font-bold text-[#e63946] border border-[#e63946]"
-              : "text-gray-800 font-bold md:text-lg"
+              ? 'md:text-xl font-bold text-[#e63946] border border-[#e63946]'
+              : 'text-gray-800 font-bold md:text-lg'
           }
           to="allContest"
         >
@@ -36,8 +35,8 @@ const Navlinks = () => {
         <NavLink
           className={({ isActive }) =>
             isActive
-              ? "md:text-xl font-bold text-[#e63946] border border-[#e63946]"
-              : "text-gray-800 font-bold md:text-lg"
+              ? 'md:text-xl font-bold text-[#e63946] border border-[#e63946]'
+              : 'text-gray-800 font-bold md:text-lg'
           }
           to="leaderBoard"
         >
@@ -49,8 +48,8 @@ const Navlinks = () => {
         <NavLink
           className={({ isActive }) =>
             isActive
-              ? "md:text-xl font-bold text-[#e63946] border border-[#e63946]"
-              : "text-gray-800 font-bold md:text-lg"
+              ? 'md:text-xl font-bold text-[#e63946] border border-[#e63946]'
+              : 'text-gray-800 font-bold md:text-lg'
           }
           to="progress"
         >
@@ -62,8 +61,8 @@ const Navlinks = () => {
         <NavLink
           className={({ isActive }) =>
             isActive
-              ? "md:text-xl font-bold text-[#e63946] border border-[#e63946]"
-              : "text-gray-800 font-bold md:text-lg"
+              ? 'md:text-xl font-bold text-[#e63946] border border-[#e63946]'
+              : 'text-gray-800 font-bold md:text-lg'
           }
           to="about"
         >
