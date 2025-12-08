@@ -1,6 +1,6 @@
 import useAuth from '../../hooks/useAuth';
 
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router';
 import useAxios from '../../hooks/useAxios';
 import toast from 'react-hot-toast';
 

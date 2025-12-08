@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 // import RegisterAnime from '../../assets/Register-Anime.json';
 import toast from 'react-hot-toast';
 import useAuth from '../../hooks/useAuth';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router';
 import Social from '../../components/social/Social';
 const Login = () => {
   const { logIn } = useAuth();
