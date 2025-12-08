@@ -1,5 +1,5 @@
 import { MdOutlineMenu } from 'react-icons/md';
-import Logo from '../../assets/contesthub.png'
+import logo from '../../assets/contesthub.png'
 import { Link, NavLink } from 'react-router';
 import useAuth from '../../hooks/useAuth';
 import useSingleUser from '../../hooks/useSingleUser';
@@ -19,7 +19,7 @@ const Navbar = () => {
       });
   };
   return (
-    <div className="bg-[#a8dadc]">
+    <div className="shadow-md sticky top-0 z-10 bg-white">
       <div className="navbar  max-w-screen-xl mx-auto">
         <div className="navbar-start">
           <div className="dropdown">
@@ -33,7 +33,15 @@ const Navbar = () => {
               <Navlinks></Navlinks>
             </ul>
           </div>
-          <Logo></Logo>
+          <div className="flex items-center">
+            <img className="h-10 rounded-full" src={logo} alt="" />
+            <h1 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-blue-900 to-sky-400 inline-block ml-2">
+              Contest
+              <span className="text-blue-500 text-transparent bg-clip-text bg-gradient-to-br from-amber-600 to-amber-300 font-bold">
+                Hub
+              </span>
+            </h1>
+          </div>
         </div>
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1">
@@ -94,7 +102,7 @@ const Navbar = () => {
             </div>
           ) : (
             <Link to="/login">
-              <button className="btn btn-sm md:btn-md text-white outline-none border-none bg-[#e63946] hover:bg-[#eb5763]">
+              <button className="btn btn-sm md:btn-md bg-amber-500 text-white outline-none border-none hover:bg-amber-600 transition">
                 Login
               </button>
             </Link>

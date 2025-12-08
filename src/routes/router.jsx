@@ -1,11 +1,12 @@
 import { createBrowserRouter } from 'react-router';
 import RootLayout from '../layouts/RootLayout';
 import Home from '../pages/Home/Home/Home';
-import AllContest from '../components/AllContest/AllContest';
-import Leaderboard from '../components/Leaderboard/Leaderboard';
-import Progress from '../components/Progress/Progress';
-import About from '../components/About/About';
-import ErrorPage from '../pages/ErrorPage/ErrorPage';
+import AllContest from '../pages/AllContest/AllContest';
+import LeaderBoard from '../pages/LeaderBoard/LeaderBoard';
+import ParticipationProgress from '../pages/ParticipationProgress/ParticipationProgress';
+import About from '../pages/About/About';
+import Login from '../pages/Login/Login';
+import SignUp from '../pages/SignUp/SignUp';
 
 export const router = createBrowserRouter([
   {
@@ -17,24 +18,28 @@ export const router = createBrowserRouter([
         Component: Home,
       },
       {
-        path: '/all-contests',
-        Component: AllContest,
+        path: 'allContest',
+        element: <AllContest></AllContest>,
       },
       {
-        path: '/leaderboard',
-        Component: Leaderboard,
+        path: 'leaderBoard',
+        element: <LeaderBoard />,
       },
       {
-        path: '/progress',
-        Component: Progress,
+        path: 'progress',
+        element: <ParticipationProgress></ParticipationProgress>,
       },
       {
-        path: '/about',
-        Component: About,
+        path: 'about',
+        element: <About></About>,
       },
       {
-        path: '*',
-        Component: ErrorPage,
+        path: '/login',
+        element: <Login></Login>,
+      },
+      {
+        path: '/signup',
+        element: <SignUp></SignUp>,
       },
     ],
   },

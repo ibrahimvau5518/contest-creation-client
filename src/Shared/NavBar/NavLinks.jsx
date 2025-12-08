@@ -9,8 +9,8 @@ const Navlinks = () => {
         <NavLink
           className={({ isActive }) =>
             isActive
-              ? 'md:text-xl font-bold text-[#e63946]  border border-[#e63946]'
-              : 'text-gray-800 font-bold md:text-lg'
+              ? 'md:text-xl font-bold text-amber-500  border border-amber-500'
+              : 'text-black font-bold md:text-lg'
           }
           to="/"
         >
@@ -22,8 +22,8 @@ const Navlinks = () => {
         <NavLink
           className={({ isActive }) =>
             isActive
-              ? 'md:text-xl font-bold text-[#e63946] border border-[#e63946]'
-              : 'text-gray-800 font-bold md:text-lg'
+              ? 'md:text-xl font-bold text-amber-500  border border-amber-500'
+              : 'text-black font-bold md:text-lg'
           }
           to="allContest"
         >
@@ -35,8 +35,8 @@ const Navlinks = () => {
         <NavLink
           className={({ isActive }) =>
             isActive
-              ? 'md:text-xl font-bold text-[#e63946] border border-[#e63946]'
-              : 'text-gray-800 font-bold md:text-lg'
+              ? 'md:text-xl font-bold text-amber-500  border border-amber-500'
+              : 'text-black font-bold md:text-lg'
           }
           to="leaderBoard"
         >
@@ -48,8 +48,8 @@ const Navlinks = () => {
         <NavLink
           className={({ isActive }) =>
             isActive
-              ? 'md:text-xl font-bold text-[#e63946] border border-[#e63946]'
-              : 'text-gray-800 font-bold md:text-lg'
+              ? 'md:text-xl font-bold text-amber-500  border border-amber-500'
+              : 'text-black font-bold md:text-lg'
           }
           to="progress"
         >
@@ -61,8 +61,8 @@ const Navlinks = () => {
         <NavLink
           className={({ isActive }) =>
             isActive
-              ? 'md:text-xl font-bold text-[#e63946] border border-[#e63946]'
-              : 'text-gray-800 font-bold md:text-lg'
+              ? 'md:text-xl font-bold text-amber-500  border border-amber-500'
+              : 'text-black font-bold md:text-lg'
           }
           to="about"
         >
