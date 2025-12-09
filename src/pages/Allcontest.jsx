@@ -1,4 +1,4 @@
-import { Link, useLoaderData } from 'react-router-dom';
+import { Link, useLoaderData } from 'react-router';
 import useAllContest from '../hook/useAllContest';
 import { useContext } from 'react';
 import { AuthContext } from '../AuthProvider/AuthProvider';
