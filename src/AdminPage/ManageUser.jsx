@@ -9,7 +9,6 @@ const ManageUser = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const itemPerPage = 10;
 
-  // Fetch total count of users
   const { data: countData } = useQuery({
     queryKey: ['userCount'],
     queryFn: async () => {
@@ -66,7 +65,6 @@ const ManageUser = () => {
       confirmButtonText: 'Save',
       denyButtonText: `Don't save`,
     }).then(result => {
-      /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
         const info = {
           newRole: role,
@@ -93,7 +91,6 @@ const ManageUser = () => {
       confirmButtonText: 'Save',
       denyButtonText: `Don't save`,
     }).then(result => {
-      /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
         const info = {
           newStatus: status,
@@ -143,7 +140,6 @@ const ManageUser = () => {
             }
           });
         } else if (
-          /* Read more about handling dismissals below */
           result.dismiss === Swal.DismissReason.cancel
         ) {
           swalWithBootstrapButtons.fire({

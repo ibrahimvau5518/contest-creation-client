@@ -3,8 +3,7 @@ import usePublicAxios from '../hooks/usePublicAxios';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router';
 import AOS from 'aos';
-import 'aos/dist/aos.css'; // You can also use <link> for styles
-// ..
+import 'aos/dist/aos.css';
 AOS.init();
 
 const InsPire = () => {
@@ -22,7 +21,9 @@ const InsPire = () => {
       <div
         className="hero min-h-screen bg-fixed bg-[#1f2340] bg-top  text-white"
         style={{
-          backgroundImage: 'url(https://i.ibb.co/rGRXRwr/features-bg.png)',
+          backgroundImage:
+            'url(https://i.ibb.co.com/SwtNY5y6/wave-background-abstract-gradient-design-483537-3688.avif)',
+          height: '650px',
         }}
       >
         <div className="hero-overlay "></div>
@@ -34,21 +35,20 @@ const InsPire = () => {
             data-aos-easing="ease-in-out"
             className="max-w-md"
           >
-            <h4 className="uppercase text-xl text-[#0ecdb9] ">
+            <h4 className="uppercase text-xl text-[#FFB703]">
               BECOME A SUCCESSFUL Person
             </h4>
             <h1 className="mb-5 text-5xl font-bold uppercase">
               GET THE contest <br /> YOU WANT
             </h1>
-            <p>Total Winner : {data?.length}</p>
+            <p className="mb-5 text-[#FFB703]">Total Winner : {data?.length}</p>
             <p className="mb-5">
-              Discover a new way to develop your talents with ContestHub by
-              participating in our diverse contest offerings.ContestHub is a
-              platform designed for individuals seeking to enhance their skills
-              by participating in various contests.
+              Unleash your potential with ContestHub! Participate in a wide
+              range of contests, improve your skills, and take your talents to
+              the next level on our innovative platform.
             </p>
             <Link to={'/login'}>
-              <button className="btn btn-accent">
+              <button className="btn bg-[#FFB703]">
                 LogIn Now <FaLongArrowAltRight></FaLongArrowAltRight>
               </button>
             </Link>

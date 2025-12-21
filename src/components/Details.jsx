@@ -12,7 +12,6 @@ const Details = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Check if the contest date has passed
     const contestDate = new Date(singleData?.dates);
     if (contestDate < new Date()) {
       setOver(true);
@@ -126,7 +125,6 @@ const Details = () => {
                 <span>Task</span>: {singleData?.task}
               </p>
 
-              {/* Winner Section */}
               {over && (
                 <div className="flex justify-center flex-col items-center">
                   <div className="avatar">
@@ -144,7 +142,6 @@ const Details = () => {
                 </div>
               )}
 
-              {/* Registration Button */}
               <div className="card-actions justify-end">
                 {over ? (
                   <div className="badge badge-outline p-5 bg-red-500 text-white border-none">

@@ -14,7 +14,6 @@ const ManageContest = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const itemPerPage = 10;
 
-  // Fetch total count of contests
   const { data: countData } = useQuery({
     queryKey: ['contestCount'],
     queryFn: async () => {
@@ -96,7 +95,7 @@ const ManageContest = () => {
   };
 
   const handleUpdate = async (e) => {
-    e.preventDefault(); // Prevent form submission reload
+    e.preventDefault();
     const text = document.getElementById('text');
     let message = text.value;
 
@@ -109,7 +108,6 @@ const ManageContest = () => {
       .then(data => {
         if (data.data.modifiedCount > 0) {
           Swal.fire('Success', 'Comment sent successfully', 'success');
-          // Close modal
           document.getElementById('my_modal_3').close();
           refetch();
         }
@@ -129,7 +127,6 @@ const ManageContest = () => {
       <h2 className="font-bold text-4xl text-center">---My Contest---</h2>
       <div className="overflow-x-auto">
         <table className="table  mt-2">
-          {/* head */}
           <thead className="bg-[#0ecdb9]">
             <tr>
               <th>ContestName</th>
@@ -141,7 +138,6 @@ const ManageContest = () => {
             </tr>
           </thead>
           <tbody>
-            {/* row 1 */}
 
             {allCOntest.map(contest => (
               <tr key={contest._id}>
@@ -160,7 +156,7 @@ const ManageContest = () => {
                       onClick={() => twoWork(contest._id)}
                       className="btn bg-[#41b8e0] text-white"
                     >
-                      confirms
+                      confirm
                     </button>
                   )}
 
@@ -189,7 +185,7 @@ const ManageContest = () => {
                         send massage
                       </h3>
                       <form method="dialog">
-                        {/* if there is a button in form, it will close the modal */}
+                        
                         <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
                           ✕
                         </button>
@@ -212,7 +208,6 @@ const ManageContest = () => {
               </tr>
             ))}
 
-            {/* row 2 */}
           </tbody>
         </table>
 

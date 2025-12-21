@@ -4,8 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 
 import usePublicAxios from '../hooks/usePublicAxios';
 import AOS from 'aos';
-import 'aos/dist/aos.css'; // You can also use <link> for styles
-// ..
+import 'aos/dist/aos.css';
 AOS.init();
 
 const HomeContest = () => {
