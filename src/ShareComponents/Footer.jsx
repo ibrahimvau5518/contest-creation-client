@@ -3,63 +3,115 @@ import { Link } from 'react-router';
 
 const Footer = () => {
   return (
-    <footer className={`footer p-10 bg-[#1f2340]  text-white `}>
-      <aside>
-        <div className="flex justify-center items-center gap-2">
-          <img
-            src="https://i.ibb.co/7RVpQM8/community-06.png"
-            alt=""
-            className="w-12"
-          />
-          <p className="text-[#0ecdb9] font-bold text-2xl">ContestHub</p>
-        </div>
-        <p>
-          Contest Platform Industries Ltd.
-          <br />
-          Providing reliable tech since 1992
-        </p>
-        <aside>
-          <div className="flex justify-start space-x-5 py-3 text-3xl ">
-            <Link>
-              <FaGoogle></FaGoogle>
+    <footer className="p-10 text-white bg-gray-800">
+      <div className="flex flex-col md:flex-row justify-between gap-10 px-5">
+        <aside className="flex-1">
+          <div className="flex items-center gap-3 mb-4">
+            <img
+              src="https://i.ibb.co/1GyvJWD9/contesthub.png"
+              alt="ContestHub Logo"
+              className="w-12 rounded-full"
+            />
+            <h1 className="text-2xl font-bold text-[#FFB703]">
+              Contest<span className="text-white">Hub</span>
+            </h1>
+          </div>
+          <p className="text-gray-300 mb-4">
+            Contest Creation Platform Industries Ltd. <br />
+            Providing reliable tech solutions since 1988
+          </p>
+
+          <div className="flex gap-5 text-2xl mb-4">
+            <Link aria-label="Google" className="hover:text-[#FFB703]">
+              <FaGoogle />
             </Link>
-            <Link>
-              <FaFacebook></FaFacebook>
+            <Link aria-label="Facebook" className="hover:text-[#FFB703]">
+              <FaFacebook />
             </Link>
-            <Link>
-              <FaTwitter></FaTwitter>
+            <Link aria-label="Twitter" className="hover:text-[#FFB703]">
+              <FaTwitter />
             </Link>
-            <Link>
+            <Link aria-label="LinkedIn" className="hover:text-[#FFB703]">
               <FaLinkedin />
             </Link>
           </div>
 
-          <p>
-            Copyright © 2024 - All right reserved by Contest Platform ||
-            ContestHub Ltd
+          <p className="text-gray-400 text-sm">
+            &copy; 2024 ContestHub Ltd. All rights reserved.
           </p>
         </aside>
-      </aside>
-      <nav>
-        <h6 className="footer-title">Services</h6>
-        <a className="link link-hover">Branding</a>
-        <a className="link link-hover">Design</a>
-        <a className="link link-hover">Marketing</a>
-        <a className="link link-hover">Advertisement</a>
-      </nav>
-      <nav>
-        <h6 className="footer-title">Company</h6>
-        <a className="link link-hover">About us</a>
-        <a className="link link-hover">Contact</a>
-        <a className="link link-hover">Jobs</a>
-        <a className="link link-hover">Press kit</a>
-      </nav>
-      <nav>
-        <h6 className="footer-title">Legal</h6>
-        <a className="link link-hover">Terms of use</a>
-        <a className="link link-hover">Privacy policy</a>
-        <a className="link link-hover">Cookie policy</a>
-      </nav>
+
+        <nav className="flex flex-1 justify-between gap-10">
+          <div>
+            <h6 className="footer-title text-white font-semibold mb-3">
+              Services
+            </h6>
+            <ul className="space-y-2 text-gray-300">
+              <li>
+                <a className="link link-hover hover:text-[#FFB703]">Branding</a>
+              </li>
+              <li>
+                <a className="link link-hover hover:text-[#FFB703]">Design</a>
+              </li>
+              <li>
+                <a className="link link-hover hover:text-[#FFB703]">
+                  Marketing
+                </a>
+              </li>
+              <li>
+                <a className="link link-hover hover:text-[#FFB703]">
+                  Advertisement
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h6 className="footer-title text-white font-semibold mb-3">
+              Company
+            </h6>
+            <ul className="space-y-2 text-gray-300">
+              <li>
+                <a className="link link-hover hover:text-[#FFB703]">About Us</a>
+              </li>
+              <li>
+                <a className="link link-hover hover:text-[#FFB703]">Contact</a>
+              </li>
+              <li>
+                <a className="link link-hover hover:text-[#FFB703]">Jobs</a>
+              </li>
+              <li>
+                <a className="link link-hover hover:text-[#FFB703]">
+                  Press Kit
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h6 className="footer-title text-white font-semibold mb-3">
+              Legal
+            </h6>
+            <ul className="space-y-2 text-gray-300">
+              <li>
+                <a className="link link-hover hover:text-[#FFB703]">
+                  Terms of Use
+                </a>
+              </li>
+              <li>
+                <a className="link link-hover hover:text-[#FFB703]">
+                  Privacy Policy
+                </a>
+              </li>
+              <li>
+                <a className="link link-hover hover:text-[#FFB703]">
+                  Cookie Policy
+                </a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </div>
     </footer>
   );
 };

@@ -1,14 +1,13 @@
 import { useContext } from 'react';
 import { AuthContext } from '../AuthProvider/AuthProvider';
 import useRole from '../hooks/useRole';
-import { Navigate, useLocation } from 'react-router'; // 🔹 react-router-dom
+import { Navigate, useLocation } from 'react-router';
 
 const HostPrivate = ({ children }) => {
   const { user, loading } = useContext(AuthContext);
-  const [role, isLoading] = useRole(); // 🔹 clearer variable name
+  const [role, isLoading] = useRole(); 
   const location = useLocation();
 
-  // ----------------- Loading State -----------------
   if (loading || isLoading) {
     return (
       <div className="flex justify-center items-center pt-72">
@@ -17,12 +16,10 @@ const HostPrivate = ({ children }) => {
     );
   }
 
-  // ----------------- Authenticated + Host -----------------
-  if (user && role === 'host') {
+  if (user && (role === 'host' || role === 'admin')) {
     return children;
   }
 
-  // ----------------- Not Authorized -----------------
   return <Navigate to="/login" state={{ from: location }} replace />;
 };
 

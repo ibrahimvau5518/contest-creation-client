@@ -1,12 +1,11 @@
 import { useContext } from 'react';
 import { AuthContext } from '../AuthProvider/AuthProvider';
-import { Navigate, useLocation } from 'react-router'; // 🔹 react-router-dom
+import { Navigate, useLocation } from 'react-router';
 
 const Private = ({ children }) => {
   const { user, loading } = useContext(AuthContext);
   const location = useLocation();
 
-  // ----------------- Loading State -----------------
   if (loading) {
     return (
       <div className="flex justify-center items-center pt-72">
@@ -15,12 +14,10 @@ const Private = ({ children }) => {
     );
   }
 
-  // ----------------- Authenticated User -----------------
   if (user) {
     return children;
   }
 
-  // ----------------- Not Authenticated -----------------
   return <Navigate to="/login" state={{ from: location }} replace />;
 };
 
