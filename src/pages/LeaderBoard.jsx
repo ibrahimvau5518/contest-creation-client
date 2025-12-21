@@ -21,19 +21,18 @@ const LeaderBoard = () => {
 
   return (
     <div className=" container mx-auto ">
-      <h1 className="pt-40 text-center font-extrabold text-5xl pb-3 text-[#0ecdb9] capitalize">
+      <h1 className="pt-40 text-center font-extrabold text-5xl pb-3 text-[#FFB703] capitalize">
         Leaderboard
       </h1>
       <div className="overflow-x-auto mb-5">
         <table className="table table-zebra">
-          {/* head */}
-          <thead className="bg-[#0ecdb9] text-black">
+          <thead className="bg-[#FFB703] text-black">
             <tr>
-              <th></th>
-              <th>winer Image</th>
+              <th>#</th>
+              <th>Winner Image</th>
               <th>Name</th>
               <th>Email</th>
-              <th>Total Win</th>
+              <th>Total Wins</th>
             </tr>
           </thead>
           <tbody>
