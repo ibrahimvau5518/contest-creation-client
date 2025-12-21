@@ -15,11 +15,10 @@ const MyContest = () => {
   const itemPerPage = 10;
   const [count] = usePagination();
 
-  console.log(typeof count);
+  const validCount = Number(count) || 0;
+  let numberOfPage = Math.ceil(validCount / itemPerPage);
 
-  let numberOfPage = Math.ceil(count / itemPerPage);
-
-  const pages = [...Array(numberOfPage).keys()];
+  const pages = numberOfPage > 0 ? [...Array(numberOfPage).keys()] : [];
 
   console.log(pages);
 
@@ -43,7 +42,7 @@ const MyContest = () => {
     queryKey: ['mylist', user?.email, currentPage, itemPerPage],
     queryFn: async () => {
       const contest = await useAxiosSecure.get(
-        `http://localhost:3000/host/contest/${user?.email}?page=${currentPage}&size=${itemPerPage}`
+        `/host/contest/${user?.email}?page=${currentPage}&size=${itemPerPage}`
       );
       return contest.data;
     },
@@ -91,7 +90,6 @@ const MyContest = () => {
       <h2 className="font-bold text-4xl text-center">---My Contest---</h2>
       <div className="overflow-x-auto">
         <table className="table  mt-2">
-          {/* head */}
           <thead className="bg-[#0ecdb9]">
             <tr>
               <th>ContestName</th>
@@ -103,8 +101,6 @@ const MyContest = () => {
             </tr>
           </thead>
           <tbody>
-            {/* row 1 */}
-
             {data.map(contest => (
               <tr key={contest._id}>
                 <th>{contest.contestName}</th>
@@ -151,8 +147,6 @@ const MyContest = () => {
                 </td>
               </tr>
             ))}
-
-            {/* row 2 */}
           </tbody>
         </table>
       </div>

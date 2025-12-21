@@ -15,6 +15,7 @@ const SubmitedPage = () => {
       const result = await axiosSecure.get(`/host/contest/${user?.email}`);
       return result.data;
     },
+    enabled: !!user?.email,
   });
   if (isLoading) {
     return (
@@ -33,7 +34,6 @@ const SubmitedPage = () => {
       <div className="mt-4">
         <div className="overflow-x-auto">
           <table className="table">
-            {/* head */}
             <thead className="bg-[#0ecdb9]">
               <tr>
                 <th>Contents Title</th>
@@ -42,26 +42,22 @@ const SubmitedPage = () => {
               </tr>
             </thead>
             <tbody>
-              {/* row 1 */}
-              {postedData.map(item => (
-                <tr key={item._id}>
-                  <th
-                    onClick={() => {
-                      setTitle(item?.contestName);
-                      navigate('/dashboard/submission');
-                    }}
-                    className="underline hover:cursor-pointer"
-                  >
-                    {item?.contestName}
-                  </th>
-                  <td>{item?.prize}</td>
-                  <td>{new Date(item?.dates).toLocaleDateString()}</td>
-                </tr>
-              ))}
-
-              {/* row 2 */}
-
-              {/* row 3 */}
+              {Array.isArray(postedData) &&
+                postedData.map(item => (
+                  <tr key={item._id}>
+                    <th
+                      onClick={() => {
+                        setTitle(item?.contestName);
+                        navigate('/dashboard/submission');
+                      }}
+                      className="underline hover:cursor-pointer"
+                    >
+                      {item?.contestName}
+                    </th>
+                    <td>{item?.prize}</td>
+                    <td>{new Date(item?.dates).toLocaleDateString()}</td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>

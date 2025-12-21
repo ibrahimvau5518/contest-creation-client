@@ -1,5 +1,4 @@
 import { useContext, useState } from 'react';
-import useVerified from '../hooks/useVerified';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { useForm } from 'react-hook-form';
@@ -12,7 +11,6 @@ import { useNavigate } from 'react-router';
 import { ImSpinner9 } from 'react-icons/im';
 
 const ContestAdd = () => {
-  const [isVerified] = useVerified();
   const [startDate, setStartDate] = useState(new Date());
 
   const { user } = useContext(AuthContext);
@@ -41,7 +39,7 @@ const ContestAdd = () => {
       setLoading(true);
       const imageResponse = await axios.post(
         `https://api.imgbb.com/1/upload?key=${
-          import.meta.env.VITE_IMGBB_APT_KEY
+          import.meta.env.VITE_IMGBB_API_KEY
         }`,
         formData
       );
@@ -211,19 +209,13 @@ const ContestAdd = () => {
               onChange={date => setStartDate(date)}
             />
           </div>
-          {isVerified === 'block' ? (
-            <button className="btn w-full mt-2 md:col-span-2" disabled>
-              You are Blocked
-            </button>
-          ) : (
-            <button className="btn bg-[#0ecdb9] border-none w-full mt-2 text-white md:col-span-2">
-              {loading ? (
-                <ImSpinner9 className="animate-spin mx-auto"></ImSpinner9>
-              ) : (
-                'Add now'
-              )}
-            </button>
-          )}
+          <button className="btn bg-[#0ecdb9] border-none w-full mt-2 text-white md:col-span-2">
+            {loading ? (
+              <ImSpinner9 className="animate-spin mx-auto"></ImSpinner9>
+            ) : (
+              'Add now'
+            )}
+          </button>
         </form>
       </div>
     </div>

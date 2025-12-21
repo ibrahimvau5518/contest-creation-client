@@ -1,6 +1,4 @@
 import { useLoaderData, useNavigate } from 'react-router';
-import useVerified from '../hooks/useVerified';
-
 import useAxios from '../hooks/useAxios';
 import Swal from 'sweetalert2/dist/sweetalert2.js';
 import 'sweetalert2/src/sweetalert2.scss';
@@ -14,7 +12,6 @@ import { ImSpinner9 } from 'react-icons/im';
 
 const Update = () => {
   const singleData = useLoaderData();
-  const [isVerified] = useVerified();
   const [startDate, setStartDate] = useState(singleData?.dates);
 
   const axiosSecure = useAxios();
@@ -45,7 +42,7 @@ const Update = () => {
       try {
         const imageResponse = await axios.post(
           `https://api.imgbb.com/1/upload?key=${
-            import.meta.env.VITE_IMGBB_APT_KEY
+            import.meta.env.VITE_IMGBB_API_KEY
           }`,
           formData,
           { headers: { 'Content-Type': 'multipart/form-data' } }
@@ -203,19 +200,13 @@ const Update = () => {
               onChange={date => setStartDate(date)}
             />
           </div>
-          {isVerified === 'block' ? (
-            <button className="btn w-full mt-2 md:col-span-2" disabled>
-              You are Blocked
-            </button>
-          ) : (
-            <button className="btn bg-[#0ecdb9] border-none w-full mt-2 text-white md:col-span-2">
-              {loading ? (
-                <ImSpinner9 className="animate-spin mx-auto"></ImSpinner9>
-              ) : (
-                'Save'
-              )}
-            </button>
-          )}
+          <button className="btn bg-[#0ecdb9] border-none w-full mt-2 text-white md:col-span-2">
+            {loading ? (
+              <ImSpinner9 className="animate-spin mx-auto"></ImSpinner9>
+            ) : (
+              'Save'
+            )}
+          </button>
         </form>
       </div>
     </div>
