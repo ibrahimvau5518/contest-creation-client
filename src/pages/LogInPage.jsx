@@ -13,8 +13,6 @@ const LogInPage = () => {
   const { logIn, googleLog, loading, setLoading } = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
-
-  // ====================== EMAIL/PASSWORD LOGIN ======================
   const handleLogIn = async e => {
     e.preventDefault();
     const email = e.target.email.value;
@@ -41,13 +39,11 @@ const LogInPage = () => {
     }
   };
 
-  // ====================== GOOGLE LOGIN ======================
   const googleLogin = async () => {
     try {
       const data = await googleLog();
       const currentUser = data.user;
 
-      // DB save is already handled in AuthProvider
       Swal.fire({
         title: 'Google login success',
         icon: 'success',

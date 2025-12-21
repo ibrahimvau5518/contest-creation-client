@@ -2,10 +2,17 @@ import { Link } from 'react-router';
 
 const News = () => {
   return (
-    <div className="hero min-h-screen bg-[#1f2340] text-white">
+    <div
+      className="hero min-h-screen text-white"
+      style={{
+        backgroundImage:
+          'url(https://i.ibb.co.com/SwtNY5y6/wave-background-abstract-gradient-design-483537-3688.avif)',
+        height: '650px',
+      }}
+    >
       <div className="hero-content">
         <div className="max-w-md pt-40">
-          <h1 className="text-3xl font-bold">RECENT NEWS</h1>
+          <h1 className="text-3xl font-bold text-[#FFB703]">RECENT NEWS</h1>
 
           <p className="py-6">
             ContestHub is officially live 🎉 Stay connected for updates about
@@ -16,7 +23,7 @@ const News = () => {
           <p className="py-6">
             Subscribe to the{' '}
             <Link
-              className="text-teal-300 hover:underline"
+              className="text-[#FFB703] hover:underline"
               to="https://www.linkedin.com/"
             >
               ContestHub LinkedIn channel
@@ -24,7 +31,9 @@ const News = () => {
             to never miss important contest updates.
           </p>
 
-          <h1 className="text-3xl font-bold">ABOUT THIS PLATFORM</h1>
+          <h1 className="text-3xl font-bold text-[#FFB703]">
+            ABOUT THIS PLATFORM
+          </h1>
 
           <p className="py-6">
             ContestHub is a competitive platform where creators host contests
@@ -40,7 +49,7 @@ const News = () => {
 
           <p className="py-6">
             Looking for currently active contests? Visit the{' '}
-            <Link className="text-teal-300 hover:underline" to="/allData">
+            <Link className="text-[#FFB703] hover:underline" to="/allContest">
               contests section
             </Link>{' '}
             and join before the deadlines close.
