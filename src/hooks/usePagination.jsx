@@ -9,7 +9,7 @@ const usePagination = () => {
     queryKey: ['mydata'],
     queryFn: async () => {
       const result = await axios.get(
-        `https://serversite12.vercel.app/count/host/contest/${user?.email}`
+        `http://localhost:3000/count/host/contest/${user?.email}`
       );
       return result.data.count;
     },

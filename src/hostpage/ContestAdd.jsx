@@ -1,11 +1,11 @@
 import { useContext, useState } from 'react';
-import useVerified from '../hook/useVerified';
+import useVerified from '../hooks/useVerified';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import { AuthContext } from '../AuthProvider/AuthProvider';
-import useAxios from '../hook/useAxios';
+import useAxios from '../hooks/useAxios';
 import Swal from 'sweetalert2/dist/sweetalert2.js';
 import 'sweetalert2/src/sweetalert2.scss';
 import { useNavigate } from 'react-router';

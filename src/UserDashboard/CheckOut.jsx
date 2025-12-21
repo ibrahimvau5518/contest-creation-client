@@ -1,121 +1,121 @@
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../AuthProvider/AuthProvider';
-import usePublicAxios from '../hook/usePublicAxios';
-import Swal from 'sweetalert2/dist/sweetalert2.js';
-import 'sweetalert2/src/sweetalert2.scss';
+import usePublicAxios from '../hooks/usePublicAxios';
+import Swal from 'sweetalert2';
 import { ImSpinner9 } from 'react-icons/im';
 import { useNavigate } from 'react-router';
 
 const CheckOut = ({ registerContest }) => {
   const { user } = useContext(AuthContext);
-  const price = parseInt(registerContest?.price);
-  console.log(price);
+  const price = parseInt(registerContest?.price) || 0;
   const axiosSecure = usePublicAxios();
 
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
-
   const [error, setError] = useState('');
-  const [clientSecret, setClientSecrete] = useState('');
-  const [transectionId, setTransectionId] = useState('');
+  const [clientSecret, setClientSecret] = useState('');
+  const [transactionId, setTransactionId] = useState('');
+
   const stripe = useStripe();
   const elements = useElements();
+  const navigate = useNavigate();
+
+  // ================= Create PaymentIntent =================
   useEffect(() => {
     if (price > 0) {
-      axiosSecure.post('/create-payment-intent', { price: price }).then(res => {
-        console.log(res.data.clientSecret);
-        setClientSecrete(res.data.clientSecret);
-      });
+      axiosSecure
+        .post('/create-payment-intent', { price })
+        .then(res => setClientSecret(res.data.clientSecret))
+        .catch(err => console.error('PaymentIntent Error:', err));
     }
   }, [axiosSecure, price]);
 
+  // ================= Handle Payment =================
   const handleSubmit = async e => {
     e.preventDefault();
     setLoading(true);
-    const answer = e.target.answer.value;
 
-    if (!stripe || !elements) {
-      return;
-    }
+    if (!stripe || !elements) return;
 
     const card = elements.getElement(CardElement);
+    if (!card) return;
 
-    if (card === null) {
-      return;
-    }
-
-    const { error, paymentMethod } = await stripe.createPaymentMethod({
+    // 1️⃣ Create Payment Method
+    const { error: pmError, paymentMethod } = await stripe.createPaymentMethod({
       type: 'card',
       card,
+      billing_details: {
+        email: user?.email || 'anonymous',
+        name: user?.displayName || 'anonymous',
+      },
     });
 
-    if (error) {
-      console.log('[error]', error);
-      setError(error.message);
+    if (pmError) {
+      setError(pmError.message);
+      setLoading(false);
+      return;
     } else {
-      console.log('[PaymentMethod]', paymentMethod);
       setError('');
     }
 
-    // confirm payment :--
+    // 2️⃣ Confirm Card Payment
     const { paymentIntent, error: confirmError } =
       await stripe.confirmCardPayment(clientSecret, {
-        payment_method: {
-          card: card,
-          billing_details: {
-            email: user?.email || 'anonymous',
-            name: user?.displayName || 'anonymous',
-          },
-        },
+        payment_method: paymentMethod.id,
       });
 
     if (confirmError) {
-      console.log('confirm error', confirmError);
       setError(confirmError.message);
-    } else {
-      console.log('payment intent ', paymentIntent);
+      setLoading(false);
+      return;
+    }
 
-      if (paymentIntent.status === 'succeeded') {
-        console.log('payment success');
-        setTransectionId(paymentIntent.id);
+    if (paymentIntent.status === 'succeeded') {
+      setTransactionId(paymentIntent.id);
 
-        // Save payment to the database
-        const payment = {
-          registerId: registerContest?._id,
-          contestName: registerContest?.contestName,
-          contestType: registerContest?.contestType,
-          price: registerContest?.price,
-          prize: registerContest?.prize,
-          task: registerContest?.task,
-          image: registerContest?.image,
-          hostName: registerContest?.hostName,
-          hostEmail: registerContest?.hostEmail,
-          hostImage: registerContest?.hostImage,
-          ContestId: registerContest?.ContestId,
-          date: new Date(),
-          status: 'pending',
-          participateUserName: user?.displayName,
-          participateUserEmail: user?.email,
-          participateUserPhoto: user?.photoURL,
-          answer,
-          tranSectionId: paymentIntent?.id,
-          ContestDate: registerContest?.dates,
-        };
+      // 3️⃣ Save Payment info to DB
+      const payment = {
+        registerId: registerContest?._id,
+        contestName: registerContest?.contestName,
+        contestType: registerContest?.contestType,
+        price: registerContest?.price,
+        prize: registerContest?.prize,
+        task: registerContest?.task,
+        image: registerContest?.image,
+        hostName: registerContest?.hostName,
+        hostEmail: registerContest?.hostEmail,
+        hostImage: registerContest?.hostImage,
+        ContestId: registerContest?.ContestId,
+        date: new Date(),
+        status: 'pending',
+        participateUserName: user?.displayName,
+        participateUserEmail: user?.email,
+        participateUserPhoto: user?.photoURL,
+        answer: e.target.answer.value,
+        transactionId: paymentIntent.id,
+        ContestDate: registerContest?.dates,
+      };
 
-        await axiosSecure.post('/payments', payment).then(data => {
-          console.log('payment save', data.data);
-          Swal.fire({
-            title: 'Good job!',
-            text: 'You clicked the button!',
-            icon: 'success',
-          });
-          navigate('/dashboard/participate');
-          setLoading(false);
-          e.target.reset();
+      try {
+        await axiosSecure.post('/payments', payment);
+        Swal.fire({
+          title: 'Payment Successful!',
+          text: 'You have successfully submitted the contest.',
+          icon: 'success',
+        });
+        navigate('/dashboard/participate');
+        e.target.reset();
+      } catch (err) {
+        console.error('Save Payment Error:', err);
+        Swal.fire({
+          title: 'Error!',
+          text: 'Failed to save payment.',
+          icon: 'error',
         });
       }
     }
+
+    setLoading(false);
   };
 
   return (
@@ -126,10 +126,10 @@ const CheckOut = ({ registerContest }) => {
         </label>
         <textarea
           name="answer"
-          className="textarea textarea-accent w-full "
-          placeholder="write the answer"
+          className="textarea textarea-accent w-full"
+          placeholder="Write your answer"
           required
-        ></textarea>
+        />
       </div>
 
       <CardElement
@@ -139,33 +139,24 @@ const CheckOut = ({ registerContest }) => {
             base: {
               fontSize: '16px',
               color: '#0ecdb9',
-              '::placeholder': {
-                color: '#0ecdb9',
-              },
+              '::placeholder': { color: '#0ecdb9' },
             },
-            invalid: {
-              color: '#9e2146',
-            },
+            invalid: { color: '#9e2146' },
           },
         }}
       />
-      <div className="flex justify-center">
+
+      <div className="flex flex-col items-center mt-10">
         <button
-          className="btn text-white bg-[#0ecdb9] w-1/2 my-10"
+          className="btn bg-[#0ecdb9] text-white w-1/2 flex justify-center items-center"
           type="submit"
-          disabled={!stripe || !clientSecret}
+          disabled={!stripe || !clientSecret || loading}
         >
-          {loading ? (
-            <ImSpinner9 className="animate-spin mx-auto"></ImSpinner9>
-          ) : (
-            'pay'
-          )}
+          {loading ? <ImSpinner9 className="animate-spin" /> : `Pay $${price}`}
         </button>
-        <p className="text-red-600">{error}</p>
-        {transectionId && (
-          <p className="text-green-600">
-            Your transaction ID is: {transectionId}
-          </p>
+        {error && <p className="text-red-600 mt-2">{error}</p>}
+        {transactionId && (
+          <p className="text-green-600 mt-2">Transaction ID: {transactionId}</p>
         )}
       </div>
     </form>

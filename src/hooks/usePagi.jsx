@@ -10,7 +10,7 @@ const usePagi = () => {
     queryKey: ['myparticipate', user?.email],
     queryFn: async () => {
       const result = await axios.get(
-        `https://serversite12.vercel.app/count/my/contest/${user?.email}`
+        `http://localhost:3000/count/my/contest/${user?.email}`
       );
       return result.data.count;
     },

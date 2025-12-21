@@ -25,7 +25,8 @@ const Banner = () => {
       <div
         className="hero bg-fixed "
         style={{
-          backgroundImage: 'url(https://i.ibb.co/0Fz5h7H/index-overlay.png)',
+          backgroundImage:
+            'url(https://i.ibb.co.com/SwtNY5y6/wave-background-abstract-gradient-design-483537-3688.avif)',
           height: '650px',
         }}
       >
@@ -37,23 +38,24 @@ const Banner = () => {
             data-aos-duration="1800"
           >
             <h1 className="text-2xl md:text-6xl font-bold text-white">
-              IMPROVE <br /> YOUR TALENT
+              ELEVATE <br /> YOUR TALENT.
             </h1>
             <p className="mb-5 text-white">
-              Get better and unlock your potential in the contest you love most.
+              Compete, grow, and unlock your potential in the contests you love
+              most.
             </p>
 
             <div className="relative">
               <input
                 type="text"
                 ref={textRef}
-                placeholder="Contest Name"
+                placeholder="Search Contests"
                 className="input input-bordered w-full  h-14"
               />
 
               <button
                 onClick={handleClick}
-                className="btn bg-[#0ecdb9] border-none text-white absolute right-1 w-18 mt-1 "
+                className="btn bg-[#FFB703] border-none text-white absolute right-1 w-18 mt-1 "
               >
                 search
               </button>
@@ -61,8 +63,8 @@ const Banner = () => {
           </div>
           <div data-aos="zoom-in-left" data-aos-duration="1800">
             <img
-              src="https://egamlio.vercel.app/images/banner-illus.png"
-              className=""
+              src="https://i.ibb.co.com/R4PBXwyR/Png-Item-1246858.png"
+              className="p-5"
               alt=""
             />
           </div>
@@ -71,19 +73,19 @@ const Banner = () => {
 
       <div className="">
         <div className="flex justify-center -mt-3  md:-mt-12   ">
-          <div className="stats shadow z-10 bg-[#1b1d4d]">
+          <div className="stats shadow px-5 z-10 bg-[#1b1d4d] border-2 border-white">
             <div className="stat">
               <div className="stat-figure text-white">
                 <img
-                  src="https://egamlio.vercel.app/images/icon/counter-icon-1.png"
+                  src="https://cdn-icons-png.flaticon.com/512/2583/2583344.png"
                   alt=""
-                  className="w-1/2"
+                  className="w-12"
                 />
               </div>
-              <div className="stat-title text-[#0ecdb9]">Total Contest</div>
+              <div className="stat-title text-[#FFB703]">Total Contest</div>
 
               <NumberCounter
-                end={80}
+                end={50}
                 delay={5}
                 postFix="+"
                 className="stat-value text-white"
@@ -92,16 +94,16 @@ const Banner = () => {
               </NumberCounter>
             </div>
 
-            <div className="stat">
+            <div className="stat ">
               <div className="stat-figure text-secondary">
                 <img
-                  src="	https://egamlio.vercel.app/images/icon/counter-icon-2.png"
-                  className="w-1/2"
+                  src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+                  className="w-12"
                 />
               </div>
-              <div className="stat-title text-[#0ecdb9]">Users</div>
+              <div className="stat-title text-[#FFB703]">Users</div>
               <NumberCounter
-                end={500}
+                end={100}
                 delay={5}
                 postFix="K"
                 className="stat-value text-white"
@@ -113,15 +115,15 @@ const Banner = () => {
                 <div className="avatar">
                   <div className="w-16 rounded-full">
                     <img
-                      src="	https://egamlio.vercel.app/images/icon/counter-icon-3.png"
-                      className="w-1/2"
+                      src="https://cdn-icons-png.flaticon.com/512/1995/1995515.png"
+                      className="w-12"
                     />
                   </div>
                 </div>
               </div>
-              <div className=" text-[#0ecdb9]">Champions</div>
+              <div className=" text-[#FFB703]">Champions</div>
               <NumberCounter
-                end={150}
+                end={100}
                 delay={5}
                 postFix="+"
                 className="stat-value text-white"

@@ -1,5 +1,5 @@
 import { FaLongArrowAltRight } from 'react-icons/fa';
-import usePublicAxios from '../hook/usePublicAxios';
+import usePublicAxios from '../hooks/usePublicAxios';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router';
 import AOS from 'aos';

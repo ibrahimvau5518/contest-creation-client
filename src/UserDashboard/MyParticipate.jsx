@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
-import useAxios from '../hook/useAxios';
+import useAxios from '../hooks/useAxios';
 import { useContext, useState } from 'react';
 import { AuthContext } from '../AuthProvider/AuthProvider';
 import Countdown from 'react-countdown';
 import { useNavigate } from 'react-router';
-import usePagi from '../hook/usePagi';
+import usePagi from '../hooks/usePagi';
 
 const MyParticipate = () => {
   const axiosSecure = useAxios();
@@ -12,19 +12,19 @@ const MyParticipate = () => {
   const { user } = useContext(AuthContext);
   const [sortOrder, setSortOrder] = useState('asc');
   const navigate = useNavigate();
-  console.log(sortOrder);
+  // console.log(sortOrder);
   const [currentPage, setCurrentPage] = useState(0);
 
   const itemPerPage = 10;
   const [count] = usePagi();
 
-  console.log(typeof count);
+  // console.log(typeof count);
 
   let numberOfPage = Math.ceil(count / itemPerPage);
 
   const pages = [...Array(numberOfPage).keys()];
 
-  console.log(pages);
+  // console.log(pages);
 
   const handlePrev = () => {
     if (currentPage > 0) {

@@ -3,8 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import Swal from 'sweetalert2/dist/sweetalert2.js';
 import 'sweetalert2/src/sweetalert2.scss';
 import { useRef, useState } from 'react';
-import useAxios from '../hook/useAxios';
-import { useLoaderData } from 'react-router';
+import useAxios from '../hooks/useAxios';
 
 const ManageContest = () => {
   const useAxiosSecure = useAxios();
@@ -15,15 +14,18 @@ const ManageContest = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const itemPerPage = 10;
 
-  const { count } = useLoaderData();
+  // Fetch total count of contests
+  const { data: countData } = useQuery({
+    queryKey: ['contestCount'],
+    queryFn: async () => {
+      const res = await useAxiosSecure.get('/contests/count');
+      return res.data;
+    },
+  });
 
-  console.log(typeof count);
-
-  let numberOfPage = Math.ceil(count / itemPerPage);
-
-  const pages = [...Array(numberOfPage).keys()];
-
-  console.log(pages);
+  const count = countData?.count || 0;
+  const numberOfPage = Math.ceil(count / itemPerPage);
+  const pages = numberOfPage > 0 ? [...Array(numberOfPage).keys()] : [];
 
   const handlePrev = () => {
     if (currentPage > 0) {
@@ -45,7 +47,7 @@ const ManageContest = () => {
     queryKey: ['allCOntest', currentPage, itemPerPage],
     queryFn: async () => {
       const contest = await useAxiosSecure.get(
-        `/allContes/for/Admin?page=${currentPage}&size=${itemPerPage}`
+        `/contests/admin?page=${currentPage}&size=${itemPerPage}`
       );
       return contest.data;
     },
@@ -60,12 +62,11 @@ const ManageContest = () => {
   }
 
   const twoWork = async id => {
-    const singleData = allCOntest.find(contest => contest._id === id);
-
-    await useAxiosSecure.post('/add/allContest', singleData).then(data => {
-      console.log(data.data);
-      Swal.fire('accepted');
-      refetch();
+    await useAxiosSecure.put(`/approve/contest/${id}`).then(data => {
+      if (data.data.modifiedCount > 0) {
+        Swal.fire('Accepted!', 'Contest has been approved.', 'success');
+        refetch();
+      }
     });
   };
 
@@ -79,48 +80,47 @@ const ManageContest = () => {
       cancelButtonColor: '#d33',
       confirmButtonText: 'Yes, delete it!',
     }).then(result => {
-      useAxiosSecure.delete(`/delete/creator/collection/${id}`).then(data => {
-        if (data.data) {
-          if (result.isConfirmed) {
+      if (result.isConfirmed) {
+        useAxiosSecure.delete(`/delete/creator/collection/${id}`).then(data => {
+          if (data.data.deletedCount > 0) {
             Swal.fire({
               title: 'Deleted!',
               text: 'Your file has been deleted.',
               icon: 'success',
             });
+            refetch();
           }
-          refetch();
-        }
-      });
+        });
+      }
     });
   };
 
-  const handleUpdate = async () => {
-    // let message = textRef.current.value;
-    console.log(id);
-
+  const handleUpdate = async (e) => {
+    e.preventDefault(); // Prevent form submission reload
     const text = document.getElementById('text');
     let message = text.value;
-
-    console.log(message);
 
     const info = {
       comment: message,
     };
 
     await useAxiosSecure
-      .put(`/sendMassage/${id}`, info)
+      .put(`/contest/comment/${id}`, info)
       .then(data => {
-        console.log(data.data);
-        Swal.fire('massage send');
-      })
-      .catch(() => {
-        {
-          Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Something went wrong!',
-          });
+        if (data.data.modifiedCount > 0) {
+          Swal.fire('Success', 'Comment sent successfully', 'success');
+          // Close modal
+          document.getElementById('my_modal_3').close();
+          refetch();
         }
+      })
+      .catch((err) => {
+        console.error(err);
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Something went wrong!',
+        });
       });
   };
 

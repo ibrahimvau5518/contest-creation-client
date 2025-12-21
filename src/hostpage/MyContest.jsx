@@ -1,11 +1,11 @@
 import { useContext, useState } from 'react';
 import { AuthContext } from '../AuthProvider/AuthProvider';
 import { useQuery } from '@tanstack/react-query';
-import useAxios from '../hook/useAxios';
+import useAxios from '../hooks/useAxios';
 import { Link } from 'react-router';
 import Swal from 'sweetalert2/dist/sweetalert2.js';
 import 'sweetalert2/src/sweetalert2.scss';
-import usePagination from '../hook/usePagination';
+import usePagination from '../hooks/usePagination';
 
 const MyContest = () => {
   const { user } = useContext(AuthContext);
@@ -43,7 +43,7 @@ const MyContest = () => {
     queryKey: ['mylist', user?.email, currentPage, itemPerPage],
     queryFn: async () => {
       const contest = await useAxiosSecure.get(
-        `https://serversite12.vercel.app/host/contest/${user?.email}?page=${currentPage}&size=${itemPerPage}`
+        `http://localhost:3000/host/contest/${user?.email}?page=${currentPage}&size=${itemPerPage}`
       );
       return contest.data;
     },

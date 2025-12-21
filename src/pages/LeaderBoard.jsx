@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import usePublicAxios from '../hook/usePublicAxios';
+import usePublicAxios from '../hooks/usePublicAxios';
 
 const LeaderBoard = () => {
   const axiosPublic = usePublicAxios();

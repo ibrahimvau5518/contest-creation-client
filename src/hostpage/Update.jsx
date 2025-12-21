@@ -1,7 +1,7 @@
 import { useLoaderData, useNavigate } from 'react-router';
-import useVerified from '../hook/useVerified';
+import useVerified from '../hooks/useVerified';
 
-import useAxios from '../hook/useAxios';
+import useAxios from '../hooks/useAxios';
 import Swal from 'sweetalert2/dist/sweetalert2.js';
 import 'sweetalert2/src/sweetalert2.scss';
 

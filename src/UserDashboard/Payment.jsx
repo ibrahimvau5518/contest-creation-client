@@ -1,12 +1,45 @@
 import { useLoaderData } from 'react-router';
-
+import { useEffect, useState } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import CheckOut from './CheckOut';
+import axios from 'axios';
+
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_KEY);
 
 const Payment = () => {
   const registerContest = useLoaderData();
+  const [clientSecret, setClientSecret] = useState('');
+
+  useEffect(() => {
+    const createPaymentIntent = async () => {
+      try {
+        const token = localStorage.getItem('access-token');
+        const res = await axios.post(
+          `http://localhost:3000/create-payment-intent/${registerContest?._id}`,
+          {},
+          {
+            headers: { Authorization: token ? `Bearer ${token}` : '' },
+          }
+        );
+        setClientSecret(res.data.clientSecret);
+      } catch (err) {
+        console.error('Payment Intent Error:', err);
+      }
+    };
+
+    if (registerContest?._id) {
+      createPaymentIntent();
+    }
+  }, [registerContest]);
+
+  if (!clientSecret) {
+    return (
+      <div className="flex justify-center items-center pt-72">
+        <span className="loading loading-spinner loading-lg"></span>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto">
@@ -17,8 +50,12 @@ const Payment = () => {
       <p className="text-end font-bold pr-4">
         Contest Price : {registerContest?.price || 0} $
       </p>
-      <Elements stripe={stripePromise}>
-        <CheckOut registerContest={registerContest}></CheckOut>
+
+      <Elements stripe={stripePromise} options={{ clientSecret }}>
+        <CheckOut
+          registerContest={registerContest}
+          clientSecret={clientSecret}
+        />
       </Elements>
     </div>
   );

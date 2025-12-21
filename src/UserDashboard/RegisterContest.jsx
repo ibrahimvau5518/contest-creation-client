@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import usePublicAxios from '../hook/usePublicAxios';
+import usePublicAxios from '../hooks/usePublicAxios';
 import { AuthContext } from '../AuthProvider/AuthProvider';
 import { useQuery } from '@tanstack/react-query';
 

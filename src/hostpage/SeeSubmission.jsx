@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { AuthContext } from '../AuthProvider/AuthProvider';
 import { useQuery } from '@tanstack/react-query';
 
-import usePublicAxios from '../hook/usePublicAxios';
+import usePublicAxios from '../hooks/usePublicAxios';
 import Swal from 'sweetalert2/dist/sweetalert2.js';
 import 'sweetalert2/src/sweetalert2.scss';
 

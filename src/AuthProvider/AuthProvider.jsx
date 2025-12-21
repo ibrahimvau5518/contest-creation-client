@@ -1,86 +1,132 @@
-import { createContext, useEffect, useState } from 'react';
 import {
-  GithubAuthProvider,
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
-  updateProfile,
 } from 'firebase/auth';
+import { createContext, useEffect, useState } from 'react';
 import auth from '../firebase/firebase.config';
 
-import useAxios from '../hooks/useAxios';
+export const AuthContext = createContext();
 
-export const AuthContext = createContext(null);
 const AuthProvider = ({ children }) => {
-  const googleProvider = new GoogleAuthProvider();
-  const githubProvider = new GithubAuthProvider();
   const [user, setUser] = useState(null);
-  const [loader, setLoader] = useState(true);
-  const axiosSecure = useAxios();
+  const [loading, setLoading] = useState(true);
+  const [inputData, setInputData] = useState('');
+  const [currentPage, setCurrentPage] = useState(0);
+  const [itemPerPage, setItemPerPage] = useState(10);
+
+  const provider = new GoogleAuthProvider();
+
   const createUser = (email, password) => {
-    setLoader(true);
+    setLoading(true);
     return createUserWithEmailAndPassword(auth, email, password);
   };
-  const logIn = (email, password) => {
-    setLoader(true);
-    return signInWithEmailAndPassword(auth, email, password);
-  };
-  const googleLogin = () => {
-    setLoader(true);
-    return signInWithPopup(auth, googleProvider);
-  };
-  const githubLogin = () => {
-    setLoader(true);
-    return signInWithPopup(auth, githubProvider);
+
+  const logIn = async (email, password) => {
+    setLoading(true);
+    const userCredential = await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    const currentUser = userCredential.user;
+    const token = await currentUser.getIdToken(true);
+    localStorage.setItem('access-token', token);
+    setUser(currentUser);
+    setLoading(false);
+    return currentUser;
   };
 
-  const logOut = () => {
-    setLoader(true);
-    return signOut(auth);
+  const googleLog = async () => {
+    setLoading(true);
+    const result = await signInWithPopup(auth, provider);
+    const currentUser = result.user;
+    const token = await currentUser.getIdToken(true);
+    localStorage.setItem('access-token', token);
+    setUser(currentUser);
+    setLoading(false);
+    return currentUser;
   };
-  const profileUpdate = (name, photo) => {
-    setLoader(true);
-    return updateProfile(auth.currentUser, {
-      displayName: name,
-      photoURL: photo,
-    });
+
+  const logout = async () => {
+    setLoading(true);
+    await signOut(auth);
+    setUser(null);
+    localStorage.removeItem('access-token');
+    setLoading(false);
+  };
+
+  const getIdToken = async () => {
+    if (!user) return null;
+    try {
+      const token = await user.getIdToken(true);
+      return token;
+    } catch (err) {
+      console.error('Failed to get ID token', err);
+      return null;
+    }
+  };
+
+  const saveUserToDB = async currentUser => {
+    if (!currentUser) return;
+    try {
+      const token = await currentUser.getIdToken(true);
+      await fetch('http://localhost:5000/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          email: currentUser.email,
+          name: currentUser.displayName || 'Anonymous',
+        }),
+      });
+    } catch (err) {
+      console.error('Save user to DB failed:', err);
+    }
   };
 
   useEffect(() => {
-    const unSubscribe = onAuthStateChanged(auth, currentUser => {
+    const unsubscribe = onAuthStateChanged(auth, async currentUser => {
       setUser(currentUser);
       if (currentUser) {
-        const userInfo = currentUser.email;
-        axiosSecure.post('/jwt', userInfo).then(res => {
-          localStorage.setItem('access-token', res?.data);
-          setLoader(false);
-        });
+        const token = await currentUser.getIdToken(true);
+        localStorage.setItem('access-token', token);
+        await saveUserToDB(currentUser);
       } else {
         localStorage.removeItem('access-token');
-        setLoader(false);
       }
+      setLoading(false);
     });
-    return () => {
-      return unSubscribe();
-    };
-  }, [axiosSecure]);
-  console.log(user);
 
-  const authInfo = {
-    user,
-    createUser,
-    logIn,
-    googleLogin,
-    githubLogin,
-    logOut,
-    profileUpdate,
-    loader,
-  };
+    return () => unsubscribe();
+  }, []);
+
   return (
-    <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
+    <AuthContext.Provider
+      value={{
+        user,
+        loading,
+        createUser,
+        logIn,
+        logout,
+        googleLog,
+        getIdToken,
+        setLoading,
+        inputData,
+        setInputData,
+        currentPage,
+        setCurrentPage,
+        itemPerPage,
+        setItemPerPage,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
   );
 };
 

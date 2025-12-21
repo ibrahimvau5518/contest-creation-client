@@ -1,24 +1,26 @@
 import { useQuery } from '@tanstack/react-query';
-import useAxios from '../hook/useAxios';
+import useAxios from '../hooks/useAxios';
 import Swal from 'sweetalert2/dist/sweetalert2.js';
 import 'sweetalert2/src/sweetalert2.scss';
 import { useState } from 'react';
-import { useLoaderData } from 'react-router';
 
 const ManageUser = () => {
   const axiosSecure = useAxios();
   const [currentPage, setCurrentPage] = useState(0);
   const itemPerPage = 10;
 
-  const { count } = useLoaderData();
+  // Fetch total count of users
+  const { data: countData } = useQuery({
+    queryKey: ['userCount'],
+    queryFn: async () => {
+      const res = await axiosSecure.get('/users/count');
+      return res.data;
+    },
+  });
 
-  console.log(typeof count);
-
-  let numberOfPage = Math.ceil(count / itemPerPage);
-
-  const pages = [...Array(numberOfPage).keys()];
-
-  console.log(pages);
+  const count = countData?.count || 0;
+  const numberOfPage = Math.ceil(count / itemPerPage);
+  const pages = numberOfPage > 0 ? [...Array(numberOfPage).keys()] : [];
 
   const handlePrev = () => {
     if (currentPage > 0) {
@@ -192,8 +194,8 @@ const ManageUser = () => {
                       <li onClick={() => changeRole(user._id, 'host')}>
                         <a>Host</a>
                       </li>
-                      <li onClick={() => changeRole(user._id, 'user')}>
-                        <a>User</a>
+                      <li onClick={() => changeRole(user._id, 'participant')}>
+                        <a>Participant</a>
                       </li>
                     </ul>
                   </div>

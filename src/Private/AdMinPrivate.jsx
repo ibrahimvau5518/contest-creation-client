@@ -1,35 +1,33 @@
 import { useContext } from 'react';
 import { AuthContext } from '../AuthProvider/AuthProvider';
-import useRole from '../hook/useRole';
-import { Navigate, useLocation } from 'react-router';
-import useVerified from '../hook/useVerified';
+import useRole from '../hooks/useRole';
+import { Navigate, useLocation } from 'react-router'; // 🔹 react-router-dom
+import useVerified from '../hooks/useVerified';
 
-const AdMinPrivate = ({ children }) => {
+const AdminPrivate = ({ children }) => {
   const { user, loading } = useContext(AuthContext);
-  const [isPosition, isLoading] = useRole();
+  const [role, isRoleLoading] = useRole(); // clearer variable name
+  const { isLoading: isVerifiedLoading } = useVerified(); // optional verified check
   const location = useLocation();
 
-  const { isLoading: load } = useVerified();
+  const token = localStorage.getItem('access-token'); // check JWT token
 
-  let token = localStorage.getItem(['access-token']);
-
-  if (loading || isLoading || load || !user) {
+  // ----------------- Loading State -----------------
+  if (loading || isRoleLoading || isVerifiedLoading || !user) {
     return (
       <div className="flex justify-center items-center pt-72">
         <span className="loading loading-spinner loading-lg"></span>
       </div>
     );
-  } else if (token && isPosition === 'admin') {
-    return children;
-  } else {
-    return (
-      <Navigate
-        state={location.pathname}
-        to={'/login'}
-        replace="true"
-      ></Navigate>
-    );
   }
+
+  // ----------------- Authenticated + Admin -----------------
+  if (token && role === 'admin') {
+    return children;
+  }
+
+  // ----------------- Not Authorized -----------------
+  return <Navigate to="/login" state={{ from: location }} replace />;
 };
 
-export default AdMinPrivate;
+export default AdminPrivate;

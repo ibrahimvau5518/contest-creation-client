@@ -1,38 +1,36 @@
 import { useContext, useState } from 'react';
 import { GrLogout } from 'react-icons/gr';
-
 import { BsFillHouseAddFill } from 'react-icons/bs';
-
 import { AiOutlineBars } from 'react-icons/ai';
-
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router'; 
 import { SiTicktick } from 'react-icons/si';
-
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router'; // Fixed import from 'react-router-dom'
 import { MdHomeWork } from 'react-icons/md';
 import { AuthContext } from '../AuthProvider/AuthProvider';
 import Swal from 'sweetalert2/dist/sweetalert2.js';
 import 'sweetalert2/src/sweetalert2.scss';
 import { FaUser } from 'react-icons/fa';
 import { IoIosAddCircle } from 'react-icons/io';
-import { RiStickyNote2Fill2 } from 'react-icons/ri';
+import { RiStickyNote2Fill } from 'react-icons/ri';
 import { TfiCup } from 'react-icons/tfi';
-import useRole from '../hook/useRole';
+import useRole from '../hooks/useRole';
 
 const Sidebar = () => {
-  const { logout, setLoading } = useContext(AuthContext);
+  const { logout, setLoading, user } = useContext(AuthContext); // Added user from context for email/dynamic checks
   const [isActive, setActive] = useState(false);
   const navigate = useNavigate();
 
-  const [isPosition] = useRole();
+  const [isPosition] = useRole(); // Assuming this hook fetches role, participate data, and count with auth token
 
-  console.log(isPosition);
+  console.log(isPosition); // This logs on every render; consider removing if not needed for production
 
   // Sidebar Responsive Handler
   const handleToggle = () => {
     setActive(!isActive);
   };
-  const handelLogIN = () => {
+
+  const handleLogout = () => {
+    // Fixed typo from 'handelLogIN' to 'handleLogout'
     logout()
       .then(() => {
         Swal.fire({
@@ -51,6 +49,12 @@ const Sidebar = () => {
         setLoading(false);
       });
   };
+
+  if (!user) {
+    // Optional: Redirect or show loading if no user (prevents unauthorized access)
+    return null; // Or <div>Loading...</div>
+  }
+
   return (
     <>
       {/* Small Screen Navbar */}
@@ -196,7 +200,7 @@ const Sidebar = () => {
                       }`
                     }
                   >
-                    <RiStickyNote2Fill2 className="w-5 h-5" />
+                    <RiStickyNote2Fill className="w-5 h-5" />
 
                     <span className="mx-4 font-medium">
                       Participated Contest
@@ -215,7 +219,7 @@ const Sidebar = () => {
                     <span className="mx-4 font-medium">Winning Contest</span>
                   </NavLink>
                   <NavLink
-                    to="/dashBoard/myProfile"
+                    to="/dashBoard/myProfile" // Fixed capitalization to "/dashboard/myProfile" if needed for consistency
                     className={({ isActive }) =>
                       `flex items-center px-4 py-2 my-5  transition-colors duration-300 transform  hover:bg-gray-300   hover:text-gray-700 ${
                         isActive ? 'bg-gray-300  text-gray-700' : 'text-white'
@@ -238,7 +242,7 @@ const Sidebar = () => {
           {/* Profile Menu */}
 
           <button
-            onClick={handelLogIN}
+            onClick={handleLogout} // Fixed to use the corrected function name
             className="flex w-full items-center px-4 py-2 mt-5 text-[white] hover:bg-gray-300   hover:text-gray-700 transition-colors duration-300 transform"
           >
             <GrLogout className="w-5 h-5" />

@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useContext } from 'react';
 import { AuthContext } from '../AuthProvider/AuthProvider';
-import useAxios from '../hook/useAxios';
+import useAxios from '../hooks/useAxios';
 import { useNavigate } from 'react-router';
 
 const SubmitedPage = () => {

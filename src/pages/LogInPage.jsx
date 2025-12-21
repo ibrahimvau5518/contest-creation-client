@@ -1,5 +1,4 @@
 import { useContext, useState } from 'react';
-
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { FcGoogle } from 'react-icons/fc';
 import { Link, useLocation, useNavigate } from 'react-router';
@@ -7,84 +6,68 @@ import { AuthContext } from '../AuthProvider/AuthProvider';
 import { ImSpinner9 } from 'react-icons/im';
 import Swal from 'sweetalert2/dist/sweetalert2.js';
 import 'sweetalert2/src/sweetalert2.scss';
-import usePublicAxios from '../hook/usePublicAxios';
 
 const LogInPage = () => {
   const [display, setDisplay] = useState(false);
 
   const { logIn, googleLog, loading, setLoading } = useContext(AuthContext);
-
   const navigate = useNavigate();
   const location = useLocation();
 
-  const axiosPublic = usePublicAxios();
-
-  const handleLogIn = e => {
+  // ====================== EMAIL/PASSWORD LOGIN ======================
+  const handleLogIn = async e => {
     e.preventDefault();
     const email = e.target.email.value;
     const password = e.target.password.value;
-    console.log(email, password);
 
-    logIn(email, password)
-      .then(() => {
-        Swal.fire({
-          title: 'LogIn success',
-          text: 'You clicked the button!',
-          icon: 'success',
-        });
-        navigate(location?.state ? location.state : '/');
-        e.target.reset();
-      })
-      .catch(error => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'Something went wrong!',
-        });
-        setLoading(false);
-        console.log(error);
+    try {
+      const userCredential = await logIn(email, password);
+      const currentUser = userCredential.user;
+
+      Swal.fire({
+        title: 'Login success',
+        icon: 'success',
       });
+      navigate(location?.state || '/');
+      e.target.reset();
+    } catch (error) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Login failed!',
+      });
+      console.error(error);
+      setLoading(false);
+    }
   };
 
-  const googleLogin = () => {
-    googleLog()
-      .then(data => {
-        const currentUser = data.user;
+  // ====================== GOOGLE LOGIN ======================
+  const googleLogin = async () => {
+    try {
+      const data = await googleLog();
+      const currentUser = data.user;
 
-        const userInfo = {
-          name: data.user?.displayName,
-          image: data.user?.photoURL,
-          status: 'verified',
-          role: 'user',
-          email: data.user?.email,
-        };
-
-        axiosPublic
-          .post('/users', userInfo)
-          .then(data => console.log(data.data));
-
-        console.log('i am from google', currentUser);
-        Swal.fire({
-          title: 'Google logIn success',
-          text: 'You clicked the button!',
-          icon: 'success',
-        });
-        navigate(location?.state ? location.state : '/');
-      })
-      .catch(() => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'Something went wrong!',
-        });
-        setLoading(false);
+      // DB save is already handled in AuthProvider
+      Swal.fire({
+        title: 'Google login success',
+        icon: 'success',
       });
+      navigate(location?.state || '/');
+    } catch (error) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Google login failed!',
+      });
+      console.error(error);
+      setLoading(false);
+    }
   };
 
   return (
     <div>
       <div
-        className="hero min-h-screen "
+        className="hero min-h-screen"
         style={{
           backgroundImage: 'url(https://i.ibb.co/fkShmqr/login-reg-bg.png)',
         }}
@@ -101,8 +84,7 @@ const LogInPage = () => {
               </div>
               <form
                 onSubmit={handleLogIn}
-                noValidate=""
-                action=""
+                noValidate
                 className="space-y-6 ng-untouched ng-pristine ng-valid"
               >
                 <div className="space-y-4">
@@ -117,52 +99,50 @@ const LogInPage = () => {
                       required
                       placeholder="Enter Your Email Here"
                       className="w-full px-3 py-2 border rounded-md border-gray-300 focus:outline-rose-500 bg-gray-200 text-gray-900"
-                      data-temp-mail-org="0"
                     />
                   </div>
                   <div className="mt-4">
                     <div className="flex justify-between">
                       <label
-                        className="block mb-2 text-sm font-medium text-gray-600 "
+                        className="block mb-2 text-sm font-medium text-gray-600"
                         htmlFor="loggingPassword"
                       >
                         Password
                       </label>
                     </div>
-
                     <div className="flex relative items-center">
                       <input
                         id="loggingPassword"
                         placeholder="Enter a password"
                         autoComplete="current-password"
                         name="password"
-                        className="block w-full px-4 py-2 text-gray-700 bg-white border rounded-lg    focus:border-blue-400 focus:ring-opacity-40  focus:outline-none focus:ring focus:ring-blue-300"
+                        className="block w-full px-4 py-2 text-gray-700 bg-white border rounded-lg focus:border-blue-400 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
                         type={display ? 'text' : 'password'}
                         required
                       />
                       <p
                         onClick={() => setDisplay(!display)}
-                        className="absolute left-[90%] text-xl text-black"
+                        className="absolute left-[90%] text-xl text-black cursor-pointer"
                       >
-                        {display ? <FaEye></FaEye> : <FaEyeSlash></FaEyeSlash>}
+                        {display ? <FaEye /> : <FaEyeSlash />}
                       </p>
                     </div>
                   </div>
                 </div>
-
                 <div>
                   <button
                     type="submit"
                     className="bg-[#0ecdb9] w-full rounded-md py-3 text-white"
                   >
                     {loading ? (
-                      <ImSpinner9 className="animate-spin mx-auto"></ImSpinner9>
+                      <ImSpinner9 className="animate-spin mx-auto" />
                     ) : (
                       'Continue'
                     )}
                   </button>
                 </div>
               </form>
+
               <div className="flex items-center pt-4 space-x-1">
                 <div className="flex-1 h-px sm:w-16 dark:bg-gray-700"></div>
                 <p className="px-3 text-sm dark:text-gray-400">
@@ -172,10 +152,9 @@ const LogInPage = () => {
               </div>
               <div
                 onClick={googleLogin}
-                className="flex justify-center items-center space-x-2 border m-3 p-2 border-gray-300 border-rounded cursor-pointer"
+                className="flex justify-center items-center space-x-2 border m-3 p-2 border-gray-300 cursor-pointer"
               >
                 <FcGoogle size={32} />
-
                 <p>Continue with Google</p>
               </div>
               <p className="px-6 text-sm text-center text-gray-400">

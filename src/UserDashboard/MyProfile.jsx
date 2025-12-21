@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
-import usePublicAxios from '../hook/usePublicAxios';
+import usePublicAxios from '../hooks/usePublicAxios';
 import { useContext, useState } from 'react';
 import { AuthContext } from '../AuthProvider/AuthProvider';
 import Swal from 'sweetalert2/dist/sweetalert2.js';
 import 'sweetalert2/src/sweetalert2.scss';
-import useMyparticipateData from '../hook/useMyparticipateData';
-import useWinnerData from '../hook/useWinnerData';
+import useMyparticipateData from '../hooks/useMyparticipateData';
+import useWinnerData from '../hooks/useWinnerData';
 import { Cell, Legend, PieChart, Pie } from 'recharts';
 import axios from 'axios';
 

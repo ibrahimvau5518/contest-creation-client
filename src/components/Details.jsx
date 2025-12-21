@@ -1,7 +1,7 @@
 import { Link, useLoaderData, useNavigate } from 'react-router';
 import Countdown from 'react-countdown';
 import { useContext, useState, useEffect } from 'react';
-import usePublicAxios from '../hook/usePublicAxios';
+import usePublicAxios from '../hooks/usePublicAxios';
 import { AuthContext } from '../AuthProvider/AuthProvider';
 
 const Details = () => {

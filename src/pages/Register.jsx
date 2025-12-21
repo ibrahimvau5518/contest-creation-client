@@ -14,7 +14,7 @@ import axios from 'axios';
 import { updateProfile } from 'firebase/auth';
 import Swal from 'sweetalert2/dist/sweetalert2.js';
 import 'sweetalert2/src/sweetalert2.scss';
-import usePublicAxios from '../hook/usePublicAxios';
+import usePublicAxios from '../hooks/usePublicAxios';
 
 const Register = () => {
   const { createUser, googleLog, loading, setLoading } =
@@ -70,7 +70,7 @@ const Register = () => {
       setLoading(true);
       const imageResponse = await axios.post(
         `https://api.imgbb.com/1/upload?key=${
-          import.meta.env.VITE_IMGBB_APT_KEY
+          import.meta.env.VITE_IMGBB_API_KEY
         }`,
         formData
       );
