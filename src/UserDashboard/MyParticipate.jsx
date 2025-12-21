@@ -18,13 +18,11 @@ const MyParticipate = () => {
   const itemPerPage = 10;
   const [count] = usePagi();
 
-  // console.log(typeof count);
 
   let numberOfPage = Math.ceil(count / itemPerPage);
 
   const pages = [...Array(numberOfPage).keys()];
 
-  // console.log(pages);
 
   const handlePrev = () => {
     if (currentPage > 0) {
@@ -40,6 +38,7 @@ const MyParticipate = () => {
 
   const { data: myParticipateData = [], isLoading } = useQuery({
     queryKey: ['myData', user?.email, sortOrder, currentPage, itemPerPage],
+    enabled: !!user?.email,
     queryFn: async () => {
       const myDatas = await axiosSecure.get(
         `/myParticipateData/${user?.email}?sort=${sortOrder}&page=${currentPage}&size=${itemPerPage}`
@@ -56,13 +55,11 @@ const MyParticipate = () => {
     );
   }
 
-  // Component to render when the countdown completes
   const Completionist = () => {
     setOver(true);
     return <span>not available</span>;
   };
 
-  // Custom renderer function for Countdown component
   const renderer = ({ days, hours, minutes, seconds, completed }) => {
     if (completed) {
       return <Completionist />;
@@ -145,7 +142,7 @@ const MyParticipate = () => {
               <th>Contest Name</th>
               <th>Submission Date</th>
               <th>Contest Date</th>
-              <th>tranSectionId</th>
+              <th>Transaction Id</th>
               <th>Register Again</th>
             </tr>
           </thead>
@@ -162,7 +159,7 @@ const MyParticipate = () => {
                     <td>
                       <Countdown date={contestDate} renderer={renderer} />
                     </td>
-                    <td>{data?.tranSectionId}</td>
+                    <td>{data?.transactionId}</td>
                     <td>
                       <button
                         onClick={() => handleRegister(data._id)}
@@ -179,7 +176,7 @@ const MyParticipate = () => {
                     <td>{data.contestName}</td>
                     <td>{new Date(data.date).toLocaleDateString()}</td>
                     <td>Invalid Date</td>
-                    <td>{data?.tranSectionId}</td>
+                    <td>{data?.transactionId}</td>
                     <td>{over && 'time over'}</td>
                   </tr>
                 );

@@ -1,36 +1,24 @@
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../AuthProvider/AuthProvider';
-import usePublicAxios from '../hooks/usePublicAxios';
+import useAxios from '../hooks/useAxios';
 import Swal from 'sweetalert2';
 import { ImSpinner9 } from 'react-icons/im';
 import { useNavigate } from 'react-router';
 
-const CheckOut = ({ registerContest }) => {
+const CheckOut = ({ registerContest, clientSecret }) => {
   const { user } = useContext(AuthContext);
   const price = parseInt(registerContest?.price) || 0;
-  const axiosSecure = usePublicAxios();
+  const axiosSecure = useAxios();
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [clientSecret, setClientSecret] = useState('');
   const [transactionId, setTransactionId] = useState('');
 
   const stripe = useStripe();
   const elements = useElements();
   const navigate = useNavigate();
 
-  // ================= Create PaymentIntent =================
-  useEffect(() => {
-    if (price > 0) {
-      axiosSecure
-        .post('/create-payment-intent', { price })
-        .then(res => setClientSecret(res.data.clientSecret))
-        .catch(err => console.error('PaymentIntent Error:', err));
-    }
-  }, [axiosSecure, price]);
-
-  // ================= Handle Payment =================
   const handleSubmit = async e => {
     e.preventDefault();
     setLoading(true);
@@ -40,7 +28,6 @@ const CheckOut = ({ registerContest }) => {
     const card = elements.getElement(CardElement);
     if (!card) return;
 
-    // 1️⃣ Create Payment Method
     const { error: pmError, paymentMethod } = await stripe.createPaymentMethod({
       type: 'card',
       card,
@@ -58,7 +45,6 @@ const CheckOut = ({ registerContest }) => {
       setError('');
     }
 
-    // 2️⃣ Confirm Card Payment
     const { paymentIntent, error: confirmError } =
       await stripe.confirmCardPayment(clientSecret, {
         payment_method: paymentMethod.id,
@@ -73,7 +59,6 @@ const CheckOut = ({ registerContest }) => {
     if (paymentIntent.status === 'succeeded') {
       setTransactionId(paymentIntent.id);
 
-      // 3️⃣ Save Payment info to DB
       const payment = {
         registerId: registerContest?._id,
         contestName: registerContest?.contestName,

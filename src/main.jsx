@@ -35,12 +35,29 @@ import News from './pages/News';
 import Dashboard from './Dashboard/Dashboard';
 
 import axios from 'axios';
+import auth from './firebase/firebase.config';
 
-// ---------------- Helper function ----------------
-const getAxiosSecure = () => {
-  const token = localStorage.getItem('access-token');
+// ---------------- Helper function for route loaders ----------------
+const getAxiosSecure = async () => {
+  const currentUser = auth.currentUser;
+  let token = null;
+
+  if (currentUser) {
+    try {
+      // Get fresh token from Firebase (force refresh)
+      token = await currentUser.getIdToken(true);
+    } catch (error) {
+      console.error('Failed to get fresh token:', error);
+      // Fallback to localStorage token
+      token = localStorage.getItem('access-token');
+    }
+  } else {
+    // No user logged in, try localStorage as fallback
+    token = localStorage.getItem('access-token');
+  }
+
   return axios.create({
-    baseURL: 'http://localhost:3000',
+    baseURL: 'http://localhost:5000',
     headers: {
       Authorization: token ? `Bearer ${token}` : '',
     },
@@ -56,14 +73,8 @@ const router = createBrowserRouter([
     errorElement: <Error />,
     element: <MainLayout />,
     children: [
-      {
-        path: '/',
-        element: <Home />
-      },
-      {
-        path: '/LeaderBoard',
-        element: <LeaderBoard />
-      },
+      { path: '/', element: <Home /> },
+      { path: '/LeaderBoard', element: <LeaderBoard /> },
       {
         path: '/allContests/:id',
         element: (
@@ -72,49 +83,39 @@ const router = createBrowserRouter([
           </Private>
         ),
         loader: async ({ params }) => {
-          const axiosSecure = getAxiosSecure();
+          const axiosSecure = await getAxiosSecure();
           const res = await axiosSecure.get(`/singleData/details/${params.id}`);
           return res.data;
         },
       },
-      {
-        path: '/login',
-        element: <LogInPage />
-      },
-      {
-        path: '/signup',
-        element: <Register />
-      },
+      { path: '/login', element: <LogInPage /> },
+      { path: '/signup', element: <Register /> },
       {
         path: '/allContest',
         element: <AllContest />,
         loader: async () => {
-          const axiosSecure = getAxiosSecure();
+          const axiosSecure = await getAxiosSecure();
           const res = await axiosSecure.get('/allData');
           return res.data;
         },
       },
-      {
-        path: 'register',
-        element: <RegisterContest />
-      },
+      { path: 'register', element: <RegisterContest /> },
       {
         path: '/payment/:id',
         element: <Payment />,
         loader: async ({ params }) => {
-          const axiosSecure = getAxiosSecure();
-          const res = await axiosSecure.get(`/getSingleContest/${params.id}`);
+          const axiosSecure = await getAxiosSecure();
+          const res = await axiosSecure.get(
+            `/getRegistrationDetails/${params.id}`
+          );
           return res.data;
         },
       },
       {
-        path: '/upcomingContest',
-        element: <Upcoming />
+        path: '/upcoming',
+        element: <Upcoming />,
       },
-      {
-        path: '/news',
-        element: <News />
-      },
+      { path: '/news', element: <News /> },
     ],
   },
   {
@@ -128,11 +129,6 @@ const router = createBrowserRouter([
             <ManageUser />
           </AdMinPrivate>
         ),
-        loader: async () => {
-          const axiosSecure = getAxiosSecure();
-          const res = await axiosSecure.get('/allusers');
-          return res.data;
-        },
       },
       {
         path: 'AddContest',
@@ -154,7 +150,7 @@ const router = createBrowserRouter([
         path: 'update/:id',
         element: <Update />,
         loader: async ({ params }) => {
-          const axiosSecure = getAxiosSecure();
+          const axiosSecure = await getAxiosSecure();
           const res = await axiosSecure.get(`/single/contest/${params.id}`);
           return res.data;
         },
@@ -166,11 +162,6 @@ const router = createBrowserRouter([
             <ManageContest />
           </AdMinPrivate>
         ),
-        loader: async () => {
-          const axiosSecure = getAxiosSecure();
-          const res = await axiosSecure.get('/allData');
-          return res.data;
-        },
       },
       { path: 'participate', element: <MyParticipate /> },
       {
@@ -181,18 +172,9 @@ const router = createBrowserRouter([
           </Private>
         ),
       },
-      {
-        path: 'submitted',
-        element: <SubmitedPage />
-      },
-      {
-        path: 'submission',
-        element: <SeeSubmission />
-      },
-      {
-        path: 'WinningContest',
-        element: <WinningContest />
-      },
+      { path: 'submitted', element: <SubmitedPage /> },
+      { path: 'submission', element: <SeeSubmission /> },
+      { path: 'WinningContest', element: <WinningContest /> },
     ],
   },
 ]);

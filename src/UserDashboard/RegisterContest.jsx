@@ -2,7 +2,6 @@ import { useContext } from 'react';
 import usePublicAxios from '../hooks/usePublicAxios';
 import { AuthContext } from '../AuthProvider/AuthProvider';
 import { useQuery } from '@tanstack/react-query';
-
 import { Link } from 'react-router';
 
 const RegisterContest = () => {
@@ -24,7 +23,6 @@ const RegisterContest = () => {
       </div>
     );
   }
-  refetch();
 
   return (
     <div>
@@ -45,7 +43,6 @@ const RegisterContest = () => {
 
       <div className="overflow-x-auto my-8 container mx-auto">
         <table className="table">
-          {/* head */}
           <thead className="bg-gray-400 text-white">
             <tr>
               <th>Contest Name</th>
@@ -55,8 +52,6 @@ const RegisterContest = () => {
             </tr>
           </thead>
           <tbody>
-            {/* row 1 */}
-
             {data?.map(item => (
               <tr key={item?._id} className="space-x-4">
                 <th>{item?.contestName}</th>
@@ -70,12 +65,8 @@ const RegisterContest = () => {
                     </button>
                   </Link>
                 </td>
-
-                {/* You can open the modal using document.getElementById('ID').showModal() method */}
               </tr>
             ))}
-
-            {/* row 2 */}
           </tbody>
         </table>
       </div>

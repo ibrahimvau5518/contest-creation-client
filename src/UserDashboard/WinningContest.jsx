@@ -41,7 +41,6 @@ const WiningContest = () => {
               <tr>
                 <th></th>
                 <th>ContestName</th>
-
                 <th>contestType</th>
                 <th>Status</th>
                 <th>Comments</th>

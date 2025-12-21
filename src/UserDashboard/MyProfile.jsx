@@ -62,11 +62,11 @@ const MyProfile = () => {
     },
     enabled: !!user?.email,
   });
-  console.log('Imgbb API Key:', import.meta.env.VITE_IMGBB_APT_KEY);
+  console.log('Imgbb API Key:', import.meta.env.VITE_IMGBB_API_KEY);
 
   const handleSubmit = async e => {
     e.preventDefault();
-    setFormError(''); // Clear previous error
+    setFormError('');
 
     try {
       const name = e.target.name.value;
@@ -86,7 +86,7 @@ const MyProfile = () => {
         try {
           const imageResponse = await axios.post(
             `https://api.imgbb.com/1/upload?key=${
-              import.meta.env.VITE_IMGBB_APT_KEY
+              import.meta.env.VITE_IMGBB_API_KEY
             }`,
             formData,
             { headers: { 'Content-Type': 'multipart/form-data' } }
