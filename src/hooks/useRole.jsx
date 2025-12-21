@@ -1,4 +1,3 @@
-// useRole.jsx
 import { useContext } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { AuthContext } from '../AuthProvider/AuthProvider';
@@ -15,12 +14,12 @@ const useRole = () => {
       if (!user?.email) return 'participant';
 
       try {
-        // ✅ Make sure route matches backend exactly
+        
         const res = await axiosSecure.get(`/users/role/${user.email}`);
         return res.data?.role || 'participant';
       } catch (err) {
         console.error('Failed to fetch role:', err);
-        return 'participant'; // fallback
+        return 'participant';
       }
     },
     retry: 1,

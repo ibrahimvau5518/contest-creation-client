@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useMemo } from 'react';
 import { AuthContext } from '../AuthProvider/AuthProvider';
 import { useNavigate } from 'react-router';
 
@@ -7,12 +7,14 @@ const useAxios = () => {
   const { user, getIdToken, logout } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const axiosSecure = axios.create({
-    baseURL: 'http://localhost:3000',
-  });
+ 
+  const axiosSecure = useMemo(() => {
+    return axios.create({
+      baseURL: 'http://localhost:5000',
+    });
+  }, []);
 
   useEffect(() => {
-    // ----------------- Request Interceptor -----------------
     const requestInterceptor = axiosSecure.interceptors.request.use(
       async config => {
         if (user && getIdToken) {
@@ -27,7 +29,6 @@ const useAxios = () => {
       }
     );
 
-    // ----------------- Response Interceptor -----------------
     const responseInterceptor = axiosSecure.interceptors.response.use(
       response => response,
       async error => {
@@ -44,7 +45,7 @@ const useAxios = () => {
       axiosSecure.interceptors.request.eject(requestInterceptor);
       axiosSecure.interceptors.response.eject(responseInterceptor);
     };
-  }, [user, getIdToken, logout, navigate]);
+  }, [user, getIdToken, logout, navigate, axiosSecure]);
 
   return axiosSecure;
 };

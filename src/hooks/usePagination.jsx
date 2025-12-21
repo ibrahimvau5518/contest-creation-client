@@ -1,15 +1,18 @@
 import { useContext } from 'react';
 import { AuthContext } from '../AuthProvider/AuthProvider';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
+import useAxios from './useAxios';
 
 const usePagination = () => {
   const { user } = useContext(AuthContext);
-  const { data: count = [] } = useQuery({
-    queryKey: ['mydata'],
+  const axiosSecure = useAxios();
+
+  const { data: count = 0 } = useQuery({
+    queryKey: ['mydata', user?.email],
+    enabled: !!user?.email,
     queryFn: async () => {
-      const result = await axios.get(
-        `http://localhost:3000/count/host/contest/${user?.email}`
+      const result = await axiosSecure.get(
+        `/count/host/contest/${user?.email}`
       );
       return result.data.count;
     },

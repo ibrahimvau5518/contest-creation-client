@@ -8,9 +8,10 @@ const usePagi = () => {
 
   const { data: count = [] } = useQuery({
     queryKey: ['myparticipate', user?.email],
+    enabled: !!user?.email,
     queryFn: async () => {
       const result = await axios.get(
-        `http://localhost:3000/count/my/contest/${user?.email}`
+        `http://localhost:5000/count/my/contest/${user?.email}`
       );
       return result.data.count;
     },

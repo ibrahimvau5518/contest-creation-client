@@ -4,25 +4,25 @@ import { useContext } from 'react';
 import { AuthContext } from '../AuthProvider/AuthProvider';
 
 const useMyparticipateData = () => {
-  const axiosSecure = useAxios(); // Token automatically add হবে
-  const { user, loading } = useContext(AuthContext); // loading ও নেওয়া দরকার
+  const axiosSecure = useAxios();
+  const { user, loading } = useContext(AuthContext);
 
   const {
     data: mydata = [],
     isLoading,
-    refetch, // optional, যদি manual refresh দরকার হয়
+    refetch, 
   } = useQuery({
     queryKey: ['myParticipateData', user?.email],
-    enabled: !!user?.email && !loading, // খুব গুরুত্বপূর্ণ: email না থাকলে request চলবে না
+    enabled: !!user?.email && !loading,
     queryFn: async () => {
       const result = await axiosSecure.get(`/myParticipateData/${user.email}`);
-      return result.data || []; // fallback empty array
+      return result.data || [];
     },
-    retry: 1, // error হলে বারবার try করবে না
-    staleTime: 5 * 60 * 1000, // 5 মিনিট cache রাখবে (optional, performance এর জন্য)
+    retry: 1,
+    staleTime: 5 * 60 * 1000,
   });
 
-  return [mydata, isLoading, refetch]; // isLoading ও refetch return করা ভালো
+  return [mydata, isLoading, refetch]; 
 };
 
 export default useMyparticipateData;

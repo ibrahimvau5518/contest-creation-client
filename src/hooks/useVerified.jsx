@@ -1,4 +1,3 @@
-// useVerified.jsx
 import { useContext } from 'react';
 import { AuthContext } from '../AuthProvider/AuthProvider';
 import useAxios from './useAxios';
@@ -10,7 +9,7 @@ const useVerified = () => {
 
   const { data: isVerified = false, isLoading } = useQuery({
     queryKey: ['verified', user?.email],
-    enabled: !!user?.email && !loading, // Only fetch if email exists
+    enabled: !!user?.email && !loading, 
     queryFn: async () => {
       if (!user?.email) return false;
       try {
@@ -22,7 +21,7 @@ const useVerified = () => {
       }
     },
     retry: 1,
-    staleTime: 5 * 60 * 1000, // 5 min cache
+    staleTime: 5 * 60 * 1000, 
   });
 
   return [isVerified, isLoading];
