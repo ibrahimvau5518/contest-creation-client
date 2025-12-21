@@ -1,4 +1,5 @@
-import { Link, useLoaderData } from 'react-router';
+import { Link } from 'react-router';
+import { useQuery } from '@tanstack/react-query';
 import useAllContest from '../hooks/useAllContest';
 import { useContext } from 'react';
 import { AuthContext } from '../AuthProvider/AuthProvider';
@@ -8,13 +9,20 @@ const AllContest = () => {
 
   const [allData] = useAllContest();
 
-  const { count } = useLoaderData();
+  const { data: countData } = useQuery({
+    queryKey: ['countApproved'],
+    queryFn: async () => {
+     
+      return fetch('http://localhost:5000/count/allContest').then(res =>
+        res.json()
+      );
+    },
+  });
 
-  console.log(typeof count);
+  const count = countData?.count || 0;
 
   let numberOfPage = Math.ceil(count / 10);
-
-  const pages = [...Array(numberOfPage).keys()];
+  const pages = numberOfPage > 0 ? [...Array(numberOfPage).keys()] : [];
 
   console.log(pages);
 
@@ -36,7 +44,7 @@ const AllContest = () => {
         className="hero "
         style={{
           backgroundImage:
-            'url(https://egamlio.vercel.app/images/banner-coaching-bg.png)',
+            'url(https://i.ibb.co.com/SwtNY5y6/wave-background-abstract-gradient-design-483537-3688.avif)',
         }}
       >
         <div className="hero-overlay bg-opacity-10"></div>
@@ -56,44 +64,41 @@ const AllContest = () => {
         </div>
       </div>
 
-      <div className="bg-[#1f2340] text-white p-10 grid grid-cols-1 md:grid-cols-3 justify-center items-center gap-2">
+      <div className="bg-black text-white p-10 grid grid-cols-1 md:grid-cols-3 justify-center items-center gap-2">
         {allData.length < 1 && (
           <h1 className="text-5xl text-red-700 text-center">No data.... </h1>
         )}
 
-        {allData
-          .filter(item => item.status === 'accepted')
-          .map(data => (
-            <div
-              key={data._id}
-              className="card  h-full bg-[#1f2340] shadow-xl "
-            >
-              <figure>
-                <img src={data?.image} alt="Shoes" />
-              </figure>
-              <div className="card-body">
-                <h2 className="card-title">{data?.contestName}</h2>
-                <p>
-                  <span className="text-[#0ecdb9] font-bold">Description </span>
-                  : {data?.description.slice(0, 60)}....
-                </p>
-                <p>
-                  {' '}
-                  <span className="text-[#0ecdb9] font-bold">
-                    Participated{' '}
-                  </span>
-                  : {data?.participated}
-                </p>
-                <div className="card-actions justify-end">
-                  <Link to={`/allContests/${data?._id}`}>
-                    <div className="badge badge-outline">Details</div>
-                  </Link>
-                </div>
+        {allData.map(data => (
+          <div
+            key={data._id}
+            className="card p-5 h-full bg-[#1f2340] shadow-xl "
+          >
+            <figure>
+              <img src={data?.image} alt="Shoes" />
+            </figure>
+            <div className="card-body">
+              <h2 className="card-title">{data?.contestName}</h2>
+              <p>
+                <span className="text-[#FFB703] font-bold">Description </span>:{' '}
+                {data?.description.slice(0, 60)}....
+              </p>
+              <p>
+                {' '}
+                <span className="text-[#FFB703] font-bold">
+                  Participated{' '}
+                </span>: {data?.participated}
+              </p>
+              <div className="card-actions justify-end">
+                <Link to={`/allContests/${data?._id}`}>
+                  <div className="btn btn-outline  text-[#FFB703]">Details</div>
+                </Link>
               </div>
             </div>
-          ))}
+          </div>
+        ))}
       </div>
-      <div className="flex justify-center bg-[#1f2340] py-10 space-x-2">
+      <div className="flex justify-center bg-black py-10 space-x-2">
         <button onClick={handlePrev} className="btn">
           Prev
         </button>
@@ -103,7 +108,7 @@ const AllContest = () => {
             onClick={() => setCurrentPage(page)}
             key={page}
             className={`btn text-black ${
-              currentPage === page && 'bg-orange-400'
+              currentPage === page && 'bg-[#FFB703]'
             } `}
           >
             {page}
