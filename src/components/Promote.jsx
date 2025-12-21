@@ -26,7 +26,7 @@ const Promote = () => {
               their skills by engaging in a variety of contests.
             </p>
             <Link to={'/allContest'}>
-              <button className="btn btn-accent">Join The Contest</button>
+              <button className="btn bg-[#FFB703]">Join The Contest</button>
             </Link>
           </div>
           <div
@@ -35,9 +35,10 @@ const Promote = () => {
             data-aos-duration="1500"
           >
             <img
-              src="https://egamlio.vercel.app/images/about-us-img.png"
+              src="https://img.freepik.com/free-vector/startup-life-concept-illustration_114360-1068.jpg
+"
               alt=""
-              className="w-[70%]"
+              className="w-[70%] rounded-full"
             />
           </div>
         </div>
