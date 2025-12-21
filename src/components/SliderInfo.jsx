@@ -1,7 +1,5 @@
-// Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-// Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
@@ -43,7 +41,7 @@ const SliderInfo = () => {
             <div className="card bg-[#15151580] text-white shadow-xl">
               <figure className="px-10 pt-10">
                 <img
-                  src="https://i.ibb.co.com/MRG3VWX/Whats-App-Image-2024-07-01-at-23-35-23-c8a7e828-prev-ui.png"
+                  src="https://i.ibb.co.com/CpcK5gL7/Picsart-25-04-07-09-06-16-642.jpg"
                   alt="image"
                   className="rounded-full w-40"
                 />

@@ -2,13 +2,8 @@ import SliderInfo from './SliderInfo';
 
 const Slider = () => {
   return (
-    <div
-      className=" bg-cover bg-bottom"
-      style={{
-        backgroundImage: 'url(https://i.ibb.co/xjyQqLf/how-works-bg.png)',
-      }}
-    >
-      <h2 className="text-4xl text-center uppercase text-[#0ecdb9] py-4 font-bold">
+    <div className=" bg-cover bg-bottom bg-[#1f2340]">
+      <h2 className="text-4xl text-center uppercase text-[#FFB703] pb-5 pt-20 font-bold">
         best contest creator
       </h2>
       <p className="text-center text-white">
