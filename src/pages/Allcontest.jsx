@@ -7,14 +7,13 @@ import { AuthContext } from '../AuthProvider/AuthProvider';
 const AllContest = () => {
   const { currentPage, setCurrentPage } = useContext(AuthContext);
 
-  const [allData] = useAllContest();
+  const [allContest] = useAllContest();
 
   const { data: countData } = useQuery({
     queryKey: ['countApproved'],
     queryFn: async () => {
-     
-      return fetch('http://localhost:5000/count/allContest').then(res =>
-        res.json()
+      return fetch('https://contest-creation.vercel.app/count/allContest').then(
+        res => res.json()
       );
     },
   });
@@ -24,7 +23,7 @@ const AllContest = () => {
   let numberOfPage = Math.ceil(count / 10);
   const pages = numberOfPage > 0 ? [...Array(numberOfPage).keys()] : [];
 
-  console.log(pages);
+  // console.log(pages);
 
   const handlePrev = () => {
     if (currentPage > 0) {
@@ -65,11 +64,11 @@ const AllContest = () => {
       </div>
 
       <div className="bg-black text-white p-10 grid grid-cols-1 md:grid-cols-3 justify-center items-center gap-2">
-        {allData.length < 1 && (
+        {allContest.length < 1 && (
           <h1 className="text-5xl text-red-700 text-center">No data.... </h1>
         )}
 
-        {allData.map(data => (
+        {allContest.map(data => (
           <div
             key={data._id}
             className="card p-5 h-full bg-[#1f2340] shadow-xl "

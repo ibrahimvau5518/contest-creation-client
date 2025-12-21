@@ -170,7 +170,7 @@ const Navbar = () => {
             </div>
           ) : (
             <Link to={'/login'}>
-              <button className="btn bg-[#0ecdb9] border-none text-white flex items-center gap-1">
+              <button className="btn bg-[#FFB703] border-none text-white flex items-center gap-1">
                 LogIn <FaLongArrowAltRight />
               </button>
             </Link>

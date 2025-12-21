@@ -11,7 +11,7 @@ const usePagi = () => {
     enabled: !!user?.email,
     queryFn: async () => {
       const result = await axios.get(
-        `http://localhost:5000/count/my/contest/${user?.email}`
+        `https://contest-creation.vercel.app/count/my/contest/${user?.email}`
       );
       return result.data.count;
     },

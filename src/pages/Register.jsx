@@ -149,7 +149,8 @@ const Register = () => {
     <div
       className="hero min-h-screen "
       style={{
-        backgroundImage: 'url(https://i.ibb.co/fkShmqr/login-reg-bg.png)',
+        backgroundImage:
+          'url(https://i.ibb.co.com/SwtNY5y6/wave-background-abstract-gradient-design-483537-3688.avif)',
       }}
     >
       <div className="hero-overlay bg-opacity-20"></div>
@@ -257,7 +258,7 @@ const Register = () => {
                   <div>
                     <button
                       type="submit"
-                      className="bg-[#0ecdb9] w-full rounded-md py-3 text-white"
+                      className="bg-[#FFB703] w-full rounded-md py-3 text-white"
                     >
                       {loading ? (
                         <ImSpinner9 className="animate-spin mx-auto"></ImSpinner9>
@@ -290,7 +291,7 @@ const Register = () => {
                   Already have an account?{' '}
                   <Link
                     to="/login"
-                    className="hover:underline hover:text-rose-500 text-[#0ecdb9]"
+                    className="hover:underline hover:text-rose-500 text-[#FFB703]"
                   >
                     Login
                   </Link>

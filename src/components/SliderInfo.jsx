@@ -10,11 +10,11 @@ import { useQuery } from '@tanstack/react-query';
 const SliderInfo = () => {
   const axiosPublic = usePublicAxios();
 
-  const { data: allData = [] } = useQuery({
+  const { data: allContest = [] } = useQuery({
     queryKey: ['all'],
     queryFn: async () => {
       const result = await axiosPublic.get(
-        `/allData-for/home/page?sort=${'asc'}`
+        `/allContest-for/home/page?sort=${'asc'}`
       );
       return result.data;
     },
@@ -36,7 +36,7 @@ const SliderInfo = () => {
         modules={[Autoplay, Pagination, Navigation]}
         className="mySwiper rounded-xl"
       >
-        {allData?.slice(0, 4).map(item => (
+        {allContest?.slice(0, 4).map(item => (
           <SwiperSlide key={item._id}>
             <div className="card bg-[#15151580] text-white shadow-xl">
               <figure className="px-10 pt-10">

@@ -10,11 +10,11 @@ AOS.init();
 const HomeContest = () => {
   const axiosPublic = usePublicAxios();
 
-  const { data: allData = [] } = useQuery({
+  const { data: allContest = [] } = useQuery({
     queryKey: ['all'],
     queryFn: async () => {
       const result = await axiosPublic.get(
-        `/allData-for/home/page?sort=${'asc'}`
+        `/allContest-for/home/page?sort=${'asc'}`
       );
       return result.data;
     },
@@ -31,15 +31,15 @@ const HomeContest = () => {
             </h1>
 
             <div className="bg-[#1f2340] text-slate-400 p-10 grid grid-cols-1 md:grid-cols-3 justify-center items-center gap-7">
-              {allData.length < 1 && (
+              {allContest.length < 1 && (
                 <div className="flex justify-center items-center mt-52">
                   <span className="loading loading-spinner loading-lg"></span>
                 </div>
               )}
 
-              {allData
+              {allContest
                 .slice(0, 6)
-                .filter(item => item.status === 'accepted')
+                .filter(item => item.status === 'approved')
                 .map((data, index) => (
                   <div
                     data-aos="zoom-in-up"

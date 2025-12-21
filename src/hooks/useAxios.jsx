@@ -7,10 +7,9 @@ const useAxios = () => {
   const { user, getIdToken, logout } = useContext(AuthContext);
   const navigate = useNavigate();
 
- 
   const axiosSecure = useMemo(() => {
     return axios.create({
-      baseURL: 'http://localhost:5000',
+      baseURL: 'https://contest-creation.vercel.app',
     });
   }, []);
 

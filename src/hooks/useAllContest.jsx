@@ -9,21 +9,21 @@ const useAllContest = () => {
   const { inputData, currentPage, itemPerPage } = useContext(AuthContext);
 
   const {
-    data: allData = [],
+    data: allContest = [],
     refetch,
     isLoading,
   } = useQuery({
     queryKey: ['all', inputData, currentPage, itemPerPage],
     queryFn: async () => {
       const allContest = await axiosPublic.get(
-        `/allData/everyone?search=${inputData}&sort=${'asc'}&page=${currentPage}&size=${itemPerPage}`
+        `/allContest/everyone?search=${inputData}&sort=${'asc'}&page=${currentPage}&size=${itemPerPage}`
       );
       return allContest.data;
     },
   });
-  console.log(allData);
+  // console.log(allContest);
 
-  return [allData, refetch, isLoading];
+  return [allContest, refetch, isLoading];
 };
 
 export default useAllContest;

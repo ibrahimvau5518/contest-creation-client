@@ -57,7 +57,7 @@ const getAxiosSecure = async () => {
   }
 
   return axios.create({
-    baseURL: 'http://localhost:5000',
+    baseURL: 'https://contest-creation.vercel.app',
     headers: {
       Authorization: token ? `Bearer ${token}` : '',
     },
@@ -95,7 +95,7 @@ const router = createBrowserRouter([
         element: <AllContest />,
         loader: async () => {
           const axiosSecure = await getAxiosSecure();
-          const res = await axiosSecure.get('/allData');
+          const res = await axiosSecure.get('/allContest');
           return res.data;
         },
       },

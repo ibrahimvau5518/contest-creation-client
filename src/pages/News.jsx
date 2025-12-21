@@ -7,7 +7,6 @@ const News = () => {
       style={{
         backgroundImage:
           'url(https://i.ibb.co.com/SwtNY5y6/wave-background-abstract-gradient-design-483537-3688.avif)',
-        height: '650px',
       }}
     >
       <div className="hero-content">

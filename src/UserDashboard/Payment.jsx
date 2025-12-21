@@ -16,7 +16,7 @@ const Payment = () => {
       try {
         const token = localStorage.getItem('access-token');
         const res = await axios.post(
-          'http://localhost:5000/create-payment-intent',
+          'https://contest-creation.vercel.app/create-payment-intent',
           { price: registerContest?.price },
           {
             headers: { Authorization: token ? `Bearer ${token}` : '' },

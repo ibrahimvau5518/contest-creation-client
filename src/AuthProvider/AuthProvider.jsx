@@ -74,7 +74,7 @@ const AuthProvider = ({ children }) => {
     if (!currentUser) return;
     try {
       const token = await currentUser.getIdToken(true);
-      await fetch('http://localhost:5000/users', {
+      await fetch('https://contest-creation.vercel.app/users', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

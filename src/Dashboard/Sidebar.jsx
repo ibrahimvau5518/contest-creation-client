@@ -90,18 +90,20 @@ const Sidebar = () => {
               <Link to="/">
                 <div className="flex justify-center items-center gap-2">
                   <img
-                    src="https://i.ibb.co/7RVpQM8/community-06.png"
+                    src="https://i.ibb.co.com/1GyvJWD9/contesthub.png"
                     alt=""
-                    className="w-12"
+                    className="w-12 rounded-full"
                   />
-                  <p className="text-[#0ecdb9] font-bold text-2xl">
-                    ContestHub
+                  <p className="text-[#FFB703] font-bold text-2xl">
+                    Contest<span className="text-white">Hub</span>
                   </p>
                 </div>
               </Link>
             </div>
 
-            <h1 className="capitalize text-center">{isPosition}</h1>
+            <h1 className="capitalize text-center text-[#FFB703]">
+              {isPosition}
+            </h1>
           </div>
 
           <div className="flex flex-col justify-between flex-1 mt-6">
@@ -136,7 +138,6 @@ const Sidebar = () => {
                   </NavLink>
                 </>
               )}
-
 
               {(isPosition === 'host' || isPosition === 'admin') && (
                 <>
@@ -227,7 +228,6 @@ const Sidebar = () => {
 
         <div>
           <hr />
-
 
           <button
             onClick={handleLogout} // Fixed to use the corrected function name
