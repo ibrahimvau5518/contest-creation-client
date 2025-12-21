@@ -4,7 +4,7 @@ import { BsFillHouseAddFill } from 'react-icons/bs';
 import { AiOutlineBars } from 'react-icons/ai';
 import { NavLink, useNavigate } from 'react-router'; 
 import { SiTicktick } from 'react-icons/si';
-import { Link } from 'react-router'; // Fixed import from 'react-router-dom'
+import { Link } from 'react-router';
 import { MdHomeWork } from 'react-icons/md';
 import { AuthContext } from '../AuthProvider/AuthProvider';
 import Swal from 'sweetalert2/dist/sweetalert2.js';
@@ -16,21 +16,19 @@ import { TfiCup } from 'react-icons/tfi';
 import useRole from '../hooks/useRole';
 
 const Sidebar = () => {
-  const { logout, setLoading, user } = useContext(AuthContext); // Added user from context for email/dynamic checks
+  const { logout, setLoading, user } = useContext(AuthContext);
   const [isActive, setActive] = useState(false);
   const navigate = useNavigate();
 
-  const [isPosition] = useRole(); // Assuming this hook fetches role, participate data, and count with auth token
+  const [isPosition] = useRole();
+  console.log(isPosition);
 
-  console.log(isPosition); // This logs on every render; consider removing if not needed for production
-
-  // Sidebar Responsive Handler
   const handleToggle = () => {
     setActive(!isActive);
   };
 
   const handleLogout = () => {
-    // Fixed typo from 'handelLogIN' to 'handleLogout'
+
     logout()
       .then(() => {
         Swal.fire({
@@ -51,13 +49,12 @@ const Sidebar = () => {
   };
 
   if (!user) {
-    // Optional: Redirect or show loading if no user (prevents unauthorized access)
-    return null; // Or <div>Loading...</div>
+   
+    return null;
   }
 
   return (
     <>
-      {/* Small Screen Navbar */}
       <div className="bg-gray-100 text-gray-800 flex justify-between md:hidden">
         <div>
           <div className="block cursor-pointer p-4 font-bold">
@@ -82,7 +79,6 @@ const Sidebar = () => {
         </button>
       </div>
 
-      {/* Sidebar */}
       <div
         className={`z-10 md:fixed flex flex-col justify-between overflow-x-hidden bg-[#212529] text-white w-64 space-y-6 px-2 py-4 absolute inset-y-0 left-0 transform ${
           isActive && '-translate-x-full'
@@ -108,10 +104,8 @@ const Sidebar = () => {
             <h1 className="capitalize text-center">{isPosition}</h1>
           </div>
 
-          {/* Nav Items */}
           <div className="flex flex-col justify-between flex-1 mt-6">
             <nav>
-              {/* admin */}
               {isPosition === 'admin' && (
                 <>
                   <NavLink
@@ -143,9 +137,8 @@ const Sidebar = () => {
                 </>
               )}
 
-              {/* host routes */}
 
-              {isPosition === 'host' && (
+              {(isPosition === 'host' || isPosition === 'admin') && (
                 <>
                   <NavLink
                     to="/dashboard/AddContest"
@@ -186,10 +179,6 @@ const Sidebar = () => {
                 </>
               )}
 
-              {/* host routes end... */}
-
-              {/* user routes */}
-
               {isPosition === 'user' && (
                 <>
                   <NavLink
@@ -219,7 +208,7 @@ const Sidebar = () => {
                     <span className="mx-4 font-medium">Winning Contest</span>
                   </NavLink>
                   <NavLink
-                    to="/dashBoard/myProfile" // Fixed capitalization to "/dashboard/myProfile" if needed for consistency
+                    to="/dashBoard/myProfile"
                     className={({ isActive }) =>
                       `flex items-center px-4 py-2 my-5  transition-colors duration-300 transform  hover:bg-gray-300   hover:text-gray-700 ${
                         isActive ? 'bg-gray-300  text-gray-700' : 'text-white'
@@ -239,7 +228,6 @@ const Sidebar = () => {
         <div>
           <hr />
 
-          {/* Profile Menu */}
 
           <button
             onClick={handleLogout} // Fixed to use the corrected function name
