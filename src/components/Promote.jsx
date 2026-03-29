@@ -10,8 +10,7 @@ const Promote = () => {
         <div className="hero-content  flex flex-col  md:flex-row-reverse">
           <div
             className="w-full pt-4"
-            data-aos="fade-left"
-            data-aos-duration="1600"
+            
           >
             <h1 className="text-5xl font-bold uppercase text-left ">
               AN ULTIMATE <br /> Contest <br /> PLATFORM
