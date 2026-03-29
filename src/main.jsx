@@ -36,6 +36,7 @@ import Dashboard from './Dashboard/Dashboard';
 
 import axios from 'axios';
 import auth from './firebase/firebase.config';
+import About from './pages/About';
 
 // ---------------- Helper function for route loaders ----------------
 const getAxiosSecure = async () => {
@@ -116,6 +117,7 @@ const router = createBrowserRouter([
         element: <Upcoming />,
       },
       { path: '/news', element: <News /> },
+      { path: '/about', element: <About /> },
     ],
   },
   {
