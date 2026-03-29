@@ -43,7 +43,7 @@ const Navbar = () => {
 
   return (
     <div className="absolute w-full z-20">
-      <div className="navbar bg-[#15151580]">
+      <div className="navbar bg-black/30 backdrop-blur-lg border-b border-white/10">
         {/* Navbar Start */}
         <div className="navbar-start">
           <div className="dropdown">
@@ -72,6 +72,8 @@ const Navbar = () => {
               <NavLink to={'/LeaderBoard'}>LeaderBoard</NavLink>
               <NavLink to={'/upcoming'}>Upcoming</NavLink>
               <NavLink to={'/news'}>News</NavLink>
+              <NavLink to={'/about'}>About</NavLink>
+              <NavLink to={'/dashBoard/myProfile'}>My Profile</NavLink>
             </ul>
           </div>
           <div className="flex justify-center items-center gap-2">
@@ -94,6 +96,8 @@ const Navbar = () => {
             <NavLink to={'/LeaderBoard'}>LeaderBoard</NavLink>
             <NavLink to={'/upcoming'}>Upcoming</NavLink>
             <NavLink to={'/news'}>News</NavLink>
+            <NavLink to={'/about'}>About</NavLink>
+            <NavLink to={'/dashBoard/myProfile'}>My Profile</NavLink>
           </ul>
         </div>
 
@@ -137,7 +141,7 @@ const Navbar = () => {
                   {role === 'admin' && (
                     <NavLink
                       to={'/dashBoard/ManageUser'}
-                      className="hover:text-[#FFB703]"
+                      className="hover:text-[#FFB703] text-lg font-bold"
                     >
                       Dashboard
                     </NavLink>
@@ -145,7 +149,7 @@ const Navbar = () => {
                   {role === 'host' && (
                     <NavLink
                       to={'/dashBoard/AddContest'}
-                      className="hover:text-[#FFB703]"
+                      className="hover:text-[#FFB703] text-lg font-bold"
                     >
                       Dashboard
                     </NavLink>
@@ -153,7 +157,7 @@ const Navbar = () => {
                   {(role === 'participant' || !role) && (
                     <NavLink
                       to={'/dashBoard/participate'}
-                      className="hover:text-[#FFB703]"
+                      className="hover:text-[#FFB703] text-lg font-bold"
                     >
                       Dashboard
                     </NavLink>
