@@ -5,11 +5,11 @@ import { AiOutlineBars } from 'react-icons/ai';
 import { NavLink, useNavigate } from 'react-router'; 
 import { SiTicktick } from 'react-icons/si';
 import { Link } from 'react-router';
-import { MdHomeWork } from 'react-icons/md';
+import { MdHomeWork, MdManageAccounts } from 'react-icons/md';
 import { AuthContext } from '../AuthProvider/AuthProvider';
 import Swal from 'sweetalert2/dist/sweetalert2.js';
 import 'sweetalert2/src/sweetalert2.scss';
-import { FaUser } from 'react-icons/fa';
+import { FaClipboardList, FaUser } from 'react-icons/fa';
 import { IoIosAddCircle } from 'react-icons/io';
 import { RiStickyNote2Fill } from 'react-icons/ri';
 import { TfiCup } from 'react-icons/tfi';
@@ -111,6 +111,31 @@ const Sidebar = () => {
               {isPosition === 'admin' && (
                 <>
                   <NavLink
+                    to="/"
+                    className={({ isActive }) =>
+                      `flex items-center px-4 py-2 my-5  transition-colors duration-300 transform  hover:bg-gray-300   hover:text-gray-700 ${
+                        isActive ? 'bg-gray-300  text-gray-700' : 'text-white'
+                      }`
+                    }
+                  >
+                    <MdHomeWork className="w-5 h-5" />
+
+                    <span className="mx-4 font-medium">Home</span>
+                  </NavLink>
+
+                  <NavLink
+                    to="/dashBoard/myProfile"
+                    className={({ isActive }) =>
+                      `flex items-center px-4 py-2 my-5  transition-colors duration-300 transform  hover:bg-gray-300   hover:text-gray-700 ${
+                        isActive ? 'bg-gray-300  text-gray-700' : 'text-white'
+                      }`
+                    }
+                  >
+                    <FaUser className="w-5 h-5" />
+
+                    <span className="mx-4 font-medium">My Profile</span>
+                  </NavLink>
+                  <NavLink
                     to="/dashboard/ManageUser"
                     end
                     className={({ isActive }) =>
@@ -119,7 +144,7 @@ const Sidebar = () => {
                       }`
                     }
                   >
-                    <FaUser className="w-5 h-5" />
+                    <MdManageAccounts className="w-5 h-5" />
 
                     <span className="mx-4 font-medium">Manage User</span>
                   </NavLink>
@@ -161,7 +186,7 @@ const Sidebar = () => {
                       }`
                     }
                   >
-                    <MdHomeWork className="w-5 h-5" />
+                    <FaClipboardList className="w-5 h-5" />
 
                     <span className="mx-4 font-medium">Created Contest</span>
                   </NavLink>
@@ -225,12 +250,10 @@ const Sidebar = () => {
             </nav>
           </div>
         </div>
-
         <div>
           <hr />
-
           <button
-            onClick={handleLogout} // Fixed to use the corrected function name
+            onClick={handleLogout}
             className="flex w-full items-center px-4 py-2 mt-5 text-[white] hover:bg-gray-300   hover:text-gray-700 transition-colors duration-300 transform"
           >
             <GrLogout className="w-5 h-5" />
