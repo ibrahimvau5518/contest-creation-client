@@ -30,29 +30,7 @@ const News = () => {
             to never miss important contest updates.
           </p>
 
-          <h1 className="text-3xl font-bold text-[#FFB703]">
-            ABOUT THIS PLATFORM
-          </h1>
-
-          <p className="py-6">
-            ContestHub is a competitive platform where creators host contests
-            and participants showcase their skills. Anyone can explore ongoing
-            contests and view submitted works.
-          </p>
-
-          <p className="py-6">
-            To ensure fairness and transparency, all submissions are reviewed
-            under controlled rules. Participants compete equally, and results
-            are verified by admins before winners are announced.
-          </p>
-
-          <p className="py-6">
-            Looking for currently active contests? Visit the{' '}
-            <Link className="text-[#FFB703] hover:underline" to="/allContest">
-              contests section
-            </Link>{' '}
-            and join before the deadlines close.
-          </p>
+         
         </div>
       </div>
     </div>
