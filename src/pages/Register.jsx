@@ -1,14 +1,10 @@
 import { useContext, useEffect, useState } from 'react';
 import { FcGoogle } from 'react-icons/fc';
 import { ImSpinner9 } from 'react-icons/im';
-import { Link, useLocation, useNavigate } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { AuthContext } from '../AuthProvider/AuthProvider';
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import {
-  loadCaptchaEnginge,
-  LoadCanvasTemplate,
-  validateCaptcha,
-} from 'react-simple-captcha';
+import { FaEye, FaEyeSlash, FaUser, FaEnvelope, FaLock, FaImage, FaShieldAlt } from 'react-icons/fa';
+import { loadCaptchaEnginge, LoadCanvasTemplate, validateCaptcha } from 'react-simple-captcha';
 import toast, { Toaster } from 'react-hot-toast';
 import axios from 'axios';
 import { updateProfile } from 'firebase/auth';
@@ -17,14 +13,10 @@ import 'sweetalert2/src/sweetalert2.scss';
 import usePublicAxios from '../hooks/usePublicAxios';
 
 const Register = () => {
-  const { createUser, googleLog, loading, setLoading } =
-    useContext(AuthContext);
+  const { createUser, googleLog, loading, setLoading } = useContext(AuthContext);
   const [display, setDisplay] = useState(false);
-
   const [set, setNow] = useState(true);
   const navigate = useNavigate();
-  const location = useLocation();
-
   const axiosPublic = usePublicAxios();
 
   useEffect(() => {
@@ -33,12 +25,9 @@ const Register = () => {
 
   const handleVerify = e => {
     let user_captcha_value = e.target.value;
-    console.log(user_captcha_value);
     if (validateCaptcha(user_captcha_value, false) == true) {
-      console.log('Captcha Matched');
       setNow(true);
     } else {
-      console.log('Captcha Does Not Match');
       setNow(false);
     }
   };
@@ -52,35 +41,23 @@ const Register = () => {
     const formData = new FormData();
     formData.append('image', image);
 
-    if (!name) {
-      return toast.error('please Enter a name');
-    } else if (!email) {
-      return toast.error('please Enter a EMail');
-    } else if (!password) {
-      return toast.error('please Enter a password');
-    } else if (!set) {
-      return toast.error('invalid captcha');
-    } else if (password.length < 6) {
-      return toast.error('Length must be at least 6 character');
-    } else if (!/^(?=.*[A-Z])/.test(password)) {
-      return toast.error('Must have an Uppercase letter in the password');
-    }
+    if (!name) return toast.error('Please enter a name');
+    if (!email) return toast.error('Please enter an email');
+    if (!password) return toast.error('Please enter a password');
+    if (!set) return toast.error('Invalid Captcha');
+    if (password.length < 6) return toast.error('Length must be at least 6 characters');
+    if (!/^(?=.*[A-Z])/.test(password)) return toast.error('Must have an uppercase letter in the password');
 
     try {
       setLoading(true);
       const imageResponse = await axios.post(
-        `https://api.imgbb.com/1/upload?key=${
-          import.meta.env.VITE_IMGBB_API_KEY
-        }`,
+        `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_API_KEY}`,
         formData
       );
       const imageUrl = imageResponse.data.data.display_url;
-      console.log(name, email, password, imageUrl);
 
       createUser(email, password).then(data => {
         const currentUser = data.user;
-        console.log(currentUser);
-
         updateProfile(currentUser, {
           displayName: name,
           photoURL: imageUrl,
@@ -89,217 +66,203 @@ const Register = () => {
             name,
             image: imageUrl,
             status: 'verified',
-            role: 'user',
+            role: 'participant',
             email,
           };
 
-          axiosPublic
-            .post('/users', userInfo)
-            .then(data => console.log(data.data));
+          axiosPublic.post('/users', userInfo).then(data => console.log(data.data));
 
           Swal.fire({
-            title: 'registration success',
-            text: 'You clicked the button!',
+            title: 'Registration completely successful!',
             icon: 'success',
+            timer: 1500,
+            showConfirmButton: false,
           });
-          navigate(location?.state ? location.state : '/');
+          navigate('/');
           e.target.reset();
         });
       });
     } catch (error) {
-      toast.error('invalid info');
+      toast.error('Registration Failed, invalid info!');
       setLoading(false);
     }
   };
+
   const handleGogleLogIn = () => {
     googleLog()
       .then(data => {
         const currentUser = data.user;
         const userInfo = {
-          name: data.user?.displayName,
-          image: data.user?.photoURL,
+          name: currentUser?.displayName,
+          image: currentUser?.photoURL,
           status: 'verified',
-          role: 'user',
-          email: data.user?.email,
+          role: 'participant',
+          email: currentUser?.email,
         };
 
-        axiosPublic
-          .post('/users', userInfo)
-          .then(data => console.log(data.data));
+        axiosPublic.post('/users', userInfo).then(data => console.log(data.data));
 
-        console.log('i am from google', currentUser);
         Swal.fire({
-          title: 'Google logIn success',
-          text: 'You clicked the button!',
+          title: 'Google Login successful!',
           icon: 'success',
+          timer: 1500,
+          showConfirmButton: false,
         });
-        navigate(location?.state ? location.state : '/');
+        navigate('/');
       })
       .catch(() => {
         Swal.fire({
           icon: 'error',
           title: 'Oops...',
-          text: 'Something went wrong!',
+          text: 'Google login failed!',
         });
         setLoading(false);
       });
   };
 
   return (
-    <div
-      className="hero min-h-screen "
-      style={{
-        backgroundImage:
-          'url(https://i.ibb.co.com/SwtNY5y6/wave-background-abstract-gradient-design-483537-3688.avif)',
-      }}
-    >
-      <div className="hero-overlay bg-opacity-20"></div>
-      <div className="hero-content">
-        <div className="">
-          <div className="pt-20">
-            <div className="flex justify-center items-center min-h-screen">
-              <div className="flex flex-col max-w-md p-6 rounded-md sm:p-10 bg-[#090539] text-white">
-                <div className="mb-8 text-center">
-                  <h1 className="my-3 text-4xl font-bold">Sign Up</h1>
-                </div>
-                <form
-                  onSubmit={handleSUbmit}
-                  noValidate=""
-                  action=""
-                  className="space-y-6 ng-untouched ng-pristine ng-valid"
-                >
-                  <div className="space-y-4">
-                    <div>
-                      <label htmlFor="name" className="block mb-2 text-sm">
-                        Name
-                      </label>
-                      <input
-                        type="text"
-                        name="name"
-                        id="name"
-                        placeholder="Enter Your Name Here"
-                        className="w-full px-3 py-2 border rounded-md border-gray-300 focus:outline-rose-500 bg-gray-200 text-gray-900"
-                        data-temp-mail-org="0"
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="image" className="block mb-2 text-sm">
-                        Select Image:
-                      </label>
-                      <input
-                        required
-                        type="file"
-                        id="image"
-                        name="image"
-                        className="w-full px-3 py-2 border rounded-md border-gray-300 focus:outline-rose-500 bg-gray-200 text-gray-900"
-                        accept="image/*"
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="email" className="block mb-2 text-sm">
-                        Email address
-                      </label>
-                      <input
-                        type="email"
-                        name="email"
-                        id="email"
-                        required
-                        placeholder="Enter Your Email Here"
-                        className="w-full px-3 py-2 border rounded-md border-gray-300 focus:outline-rose-500 bg-gray-200 text-gray-900"
-                        data-temp-mail-org="0"
-                      />
-                    </div>
-                    <div>
-                      <label className="block mb-2 text-sm bg-[#090539]">
-                        <LoadCanvasTemplate />
-                      </label>
-                      <input
-                        type="text"
-                        onBlur={handleVerify}
-                        required
-                        placeholder="Enter the captcha code"
-                        className="w-full px-3 py-2 border rounded-md border-gray-300 focus:outline-rose-500 bg-gray-200 text-gray-900"
-                        data-temp-mail-org="0"
-                      />
-                    </div>
-                    <div className="mt-4">
-                      <div className="flex justify-between">
-                        <label
-                          className="block mb-2 text-sm font-medium text-gray-600 "
-                          htmlFor="loggingPassword"
-                        >
-                          Password
-                        </label>
-                      </div>
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4 py-24 dark:bg-[#111827] transition-colors duration-300 relative overflow-hidden">
+      <Toaster />
+      {/* Background Ornaments */}
+      <div className="absolute top-[-10%] right-[-10%] w-96 h-96 bg-[#0ecdb9]/20 rounded-full blur-[100px]"></div>
+      <div className="absolute bottom-[-10%] left-[-10%] w-96 h-96 bg-[#FFB703]/20 rounded-full blur-[100px]"></div>
 
-                      <div className="flex relative items-center">
-                        <input
-                          id="loggingPassword"
-                          autoComplete="current-password"
-                          name="password"
-                          className="block w-full px-4 py-2 text-gray-700 bg-white border rounded-lg    focus:border-blue-400 focus:ring-opacity-40  focus:outline-none focus:ring focus:ring-blue-300"
-                          type={display ? 'text' : 'password'}
-                          required
-                        />
-                        <p
-                          onClick={() => setDisplay(!display)}
-                          className="absolute left-[90%] text-xl text-black"
-                        >
-                          {display ? (
-                            <FaEye></FaEye>
-                          ) : (
-                            <FaEyeSlash></FaEyeSlash>
-                          )}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
+      <div className="w-full max-w-lg z-10 animate-in fade-in slide-in-from-bottom-5 duration-700">
+        <div className="bg-white/80 dark:bg-[#1f2340]/80 backdrop-blur-xl rounded-3xl shadow-2xl p-6 sm:p-8 md:p-10 border border-white/20 dark:border-gray-800 w-full">      
 
-                  <div>
-                    <button
-                      type="submit"
-                      className="bg-[#FFB703] w-full rounded-md py-3 text-white"
-                    >
-                      {loading ? (
-                        <ImSpinner9 className="animate-spin mx-auto"></ImSpinner9>
-                      ) : (
-                        'Continue'
-                      )}
-                    </button>
-                    <Toaster
-                      position="bottom-left"
-                      reverseOrder={false}
-                    ></Toaster>
-                  </div>
-                </form>
-                <div className="flex items-center pt-4 space-x-1">
-                  <div className="flex-1 h-px sm:w-16 dark:bg-gray-700"></div>
-                  <p className="px-3 text-sm dark:text-gray-400">
-                    Signup with social accounts
-                  </p>
-                  <div className="flex-1 h-px sm:w-16 dark:bg-gray-700"></div>
-                </div>
-                <div
-                  onClick={handleGogleLogIn}
-                  className="flex justify-center items-center space-x-2 border m-3 p-2 border-gray-300 border-rounded cursor-pointer"
-                >
-                  <FcGoogle size={32} />
+          <div className="text-center mb-6 sm:mb-8">
+            <Link to="/" className="inline-block mb-4">
+              <img src="https://i.ibb.co.com/1GyvJWD9/contesthub.png" alt="Logo" className="w-12 h-12 sm:w-16 sm:h-16 mx-auto rounded-full shadow-lg" />
+            </Link>
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white mb-2 tracking-tight">
+              Create an Account
+            </h1>
+            <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400">
+              Join ContestHub today and start exploring
+            </p>
+          </div>
 
-                  <p>Continue with Google</p>
+          <form onSubmit={handleSUbmit} className="space-y-4">
+            {/* Name */}
+            <div className="form-control">
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <FaUser className="text-gray-400" />
                 </div>
-                <p className="px-6 text-sm text-center text-gray-400">
-                  Already have an account?{' '}
-                  <Link
-                    to="/login"
-                    className="hover:underline hover:text-rose-500 text-[#FFB703]"
-                  >
-                    Login
-                  </Link>
-                  .
-                </p>
+                <input
+                  type="text"
+                  name="name"
+                  required
+                  placeholder="Full Name"
+                  className="input input-bordered w-full pl-11 bg-gray-50 dark:bg-gray-800/50 dark:text-white dark:border-gray-700 focus:border-[#0ecdb9] transition-colors text-sm sm:text-base"
+                />
               </div>
             </div>
+
+            {/* Email */}
+            <div className="form-control">
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <FaEnvelope className="text-gray-400" />
+                </div>
+                <input
+                  type="email"
+                  name="email"
+                  required
+                  placeholder="Email Address"
+                  className="input input-bordered w-full pl-11 bg-gray-50 dark:bg-gray-800/50 dark:text-white dark:border-gray-700 focus:border-[#0ecdb9] transition-colors text-sm sm:text-base"
+                />
+              </div>
+            </div>
+
+            {/* Image */}
+            <div className="form-control">
+               <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <FaImage className="text-gray-400" />
+                </div>
+                <input
+                  type="file"
+                  name="image"
+                  required
+                  accept="image/*"
+                  className="file-input file-input-bordered w-full pl-12 bg-gray-50 dark:bg-gray-800/50 dark:text-white dark:border-gray-700 focus:border-[#0ecdb9] transition-colors text-sm sm:text-base"
+                />
+              </div>
+            </div>
+
+            {/* Password */}
+            <div className="form-control">
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <FaLock className="text-gray-400" />
+                </div>
+                <input
+                  type={display ? 'text' : 'password'}
+                  name="password"
+                  required
+                  placeholder="Password (Min 6 chars + Uppercase)"
+                  className="input input-bordered w-full pl-11 pr-12 bg-gray-50 dark:bg-gray-800/50 dark:text-white dark:border-gray-700 focus:border-[#0ecdb9] transition-colors text-sm sm:text-base"
+                />
+                <button
+                  type="button"
+                  onClick={() => setDisplay(!display)}
+                  className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-500 hover:text-[#0ecdb9] transition-colors focus:outline-none"
+                >
+                  {display ? <FaEyeSlash className="text-lg" /> : <FaEye className="text-lg" />}
+                </button>
+              </div>
+            </div>
+
+            {/* Captcha */}
+            <div className="form-control bg-gray-50 dark:bg-gray-800/50 p-4 rounded-xl border border-gray-200 dark:border-gray-700">
+              <div className="mb-3 flex justify-center sm:justify-start transform scale-[0.85] sm:scale-100 origin-center sm:origin-left">
+                 <LoadCanvasTemplate reloadColor="#0ecdb9" />
+              </div>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <FaShieldAlt className="text-gray-400" />
+                </div>
+                <input
+                  type="text"
+                  onBlur={handleVerify}
+                  required
+                  placeholder="Enter the captcha code above"
+                  className="input input-bordered w-full pl-11 bg-white dark:bg-gray-900 dark:text-white dark:border-gray-600 focus:border-[#0ecdb9] transition-colors text-sm sm:text-base"
+                />
+              </div>
+            </div>
+
+            <button
+               type="submit"
+               className="btn bg-gradient-to-r from-[#0ecdb9] to-[#0ba898] hover:from-[#0ba898] hover:to-[#098e80] text-white border-none w-full text-base sm:text-lg font-bold shadow-lg shadow-[#0ecdb9]/30 h-12 sm:h-14 rounded-xl mt-4 transition-transform active:scale-[0.98]"
+               disabled={loading}
+            >
+              {loading ? <ImSpinner9 className="animate-spin text-xl" /> : 'Sign Up'}
+            </button>
+          </form>
+
+          <div className="mt-6 sm:mt-8 flex items-center gap-4">
+            <div className="h-px flex-1 bg-gray-200 dark:bg-gray-700"></div>    
+            <span className="text-xs sm:text-sm font-medium text-gray-400 uppercase tracking-wider">OR</span>
+            <div className="h-px flex-1 bg-gray-200 dark:bg-gray-700"></div>    
           </div>
+
+          <button
+            onClick={handleGogleLogIn}
+            disabled={loading}
+            className="btn btn-outline w-full mt-4 sm:mt-6 flex items-center gap-3 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600 h-12 sm:h-14 rounded-xl group transition-all"
+          >
+            <FcGoogle className="text-xl sm:text-2xl group-hover:scale-110 transition-transform" />
+            <span className="font-semibold text-sm sm:text-base">Sign up with Google</span>
+          </button>
+
+          <p className="mt-6 sm:mt-8 text-center text-xs sm:text-sm text-gray-600 dark:text-gray-400">
+            Already have an account?{' '}
+            <Link to="/login" className="text-[#0ecdb9] font-bold hover:underline">
+              Sign In
+            </Link>
+          </p>
         </div>
       </div>
     </div>

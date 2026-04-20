@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { FaEye, FaEyeSlash, FaEnvelope, FaLock } from 'react-icons/fa';
 import { FcGoogle } from 'react-icons/fc';
-import { Link, useLocation, useNavigate } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { AuthContext } from '../AuthProvider/AuthProvider';
 import { ImSpinner9 } from 'react-icons/im';
 import Swal from 'sweetalert2/dist/sweetalert2.js';
@@ -9,30 +9,30 @@ import 'sweetalert2/src/sweetalert2.scss';
 
 const LogInPage = () => {
   const [display, setDisplay] = useState(false);
-
   const { logIn, googleLog, loading, setLoading } = useContext(AuthContext);
   const navigate = useNavigate();
-  const location = useLocation();
+
   const handleLogIn = async e => {
     e.preventDefault();
     const email = e.target.email.value;
     const password = e.target.password.value;
 
     try {
-      const userCredential = await logIn(email, password);
-      const currentUser = userCredential.user;
-
+      await logIn(email, password);
       Swal.fire({
-        title: 'Login success',
+        title: 'Welcome Back!',
+        text: 'Login successful',
         icon: 'success',
+        timer: 1500,
+        showConfirmButton: false,
       });
-      navigate(location?.state || '/');
+      navigate('/');
       e.target.reset();
     } catch (error) {
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
-        text: 'Login failed!',
+        text: 'Login failed! Please check your credentials.',
       });
       console.error(error);
       setLoading(false);
@@ -41,14 +41,15 @@ const LogInPage = () => {
 
   const googleLogin = async () => {
     try {
-      const data = await googleLog();
-      const currentUser = data.user;
-
+      await googleLog();
       Swal.fire({
-        title: 'Google login success',
+        title: 'Success!',
+        text: 'Google login successful',
         icon: 'success',
+        timer: 1500,
+        showConfirmButton: false,
       });
-      navigate(location?.state || '/');
+      navigate('/');
     } catch (error) {
       Swal.fire({
         icon: 'error',
@@ -61,111 +62,100 @@ const LogInPage = () => {
   };
 
   return (
-    <div>
-      <div
-        className="hero min-h-screen"
-        style={{
-          backgroundImage:
-            'url(https://i.ibb.co.com/SwtNY5y6/wave-background-abstract-gradient-design-483537-3688.avif)',
-        }}
-      >
-        <div className="hero-overlay bg-opacity-20"></div>
-        <div className="hero-content">
-          <div className="flex justify-center items-center mt-7 min-h-screen">
-            <div className="flex flex-col max-w-md p-6 rounded-md sm:p-10 bg-[#090539] text-white">
-              <div className="mb-8 text-center">
-                <h1 className="my-3 text-4xl font-bold">Log In</h1>
-                <p className="text-sm text-gray-400">
-                  Sign in to access your account
-                </p>
-              </div>
-              <form
-                onSubmit={handleLogIn}
-                noValidate
-                className="space-y-6 ng-untouched ng-pristine ng-valid"
-              >
-                <div className="space-y-4">
-                  <div>
-                    <label htmlFor="email" className="block mb-2 text-sm">
-                      Email address
-                    </label>
-                    <input
-                      type="email"
-                      name="email"
-                      id="email"
-                      required
-                      placeholder="Enter Your Email Here"
-                      className="w-full px-3 py-2 border rounded-md border-gray-300 focus:outline-rose-500 bg-gray-200 text-gray-900"
-                    />
-                  </div>
-                  <div className="mt-4">
-                    <div className="flex justify-between">
-                      <label
-                        className="block mb-2 text-sm font-medium text-gray-600"
-                        htmlFor="loggingPassword"
-                      >
-                        Password
-                      </label>
-                    </div>
-                    <div className="flex relative items-center">
-                      <input
-                        id="loggingPassword"
-                        placeholder="Enter a password"
-                        autoComplete="current-password"
-                        name="password"
-                        className="block w-full px-4 py-2 text-gray-700 bg-white border rounded-lg focus:border-blue-400 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
-                        type={display ? 'text' : 'password'}
-                        required
-                      />
-                      <p
-                        onClick={() => setDisplay(!display)}
-                        className="absolute left-[90%] text-xl text-black cursor-pointer"
-                      >
-                        {display ? <FaEye /> : <FaEyeSlash />}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <button
-                    type="submit"
-                    className="bg-[#FFB703] w-full rounded-md py-3 text-white"
-                  >
-                    {loading ? (
-                      <ImSpinner9 className="animate-spin mx-auto" />
-                    ) : (
-                      'Continue'
-                    )}
-                  </button>
-                </div>
-              </form>
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4 sm:p-6 dark:bg-[#111827] transition-colors duration-300 relative overflow-hidden">    
+      {/* Background Ornaments */}
+      <div className="absolute top-[-10%] left-[-10%] w-64 h-64 md:w-96 md:h-96 bg-[#FFB703]/20 rounded-full blur-[80px] md:blur-[100px] pointer-events-none"></div>
+      <div className="absolute bottom-[-10%] right-[-10%] w-64 h-64 md:w-96 md:h-96 bg-[#0ecdb9]/20 rounded-full blur-[80px] md:blur-[100px] pointer-events-none"></div>
 
-              <div className="flex items-center pt-4 space-x-1">
-                <div className="flex-1 h-px sm:w-16 dark:bg-gray-700"></div>
-                <p className="px-3 text-sm dark:text-gray-400">
-                  Login with social accounts
-                </p>
-                <div className="flex-1 h-px sm:w-16 dark:bg-gray-700"></div>
-              </div>
-              <div
-                onClick={googleLogin}
-                className="flex justify-center items-center space-x-2 border m-3 p-2 border-gray-300 cursor-pointer"
-              >
-                <FcGoogle size={32} />
-                <p>Continue with Google</p>
-              </div>
-              <p className="px-6 text-sm text-center text-gray-400">
-                Don&apos;t have an account yet?{' '}
-                <Link
-                  to="/signup"
-                  className="hover:underline hover:text-rose-500 text-[#FFB703]"
-                >
-                  Sign up
-                </Link>
-                .
-              </p>
-            </div>
+      <div className="w-full max-w-sm sm:max-w-md md:max-w-lg z-10 animate-in fade-in slide-in-from-bottom-5 duration-700">
+        <div className="bg-white/80 dark:bg-[#1f2340]/80 backdrop-blur-xl rounded-3xl shadow-2xl p-6 sm:p-8 md:p-10 border border-white/20 dark:border-gray-800">      
+
+          <div className="text-center mb-6 sm:mb-8">
+            <Link to="/" className="inline-block mb-3 sm:mb-4">
+              <img src="https://i.ibb.co.com/1GyvJWD9/contesthub.png" alt="Logo" className="w-14 h-14 sm:w-16 sm:h-16 mx-auto rounded-full shadow-lg" />
+            </Link>
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white mb-2 tracking-tight">
+              Welcome Back
+            </h1>
+            <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400">
+              Sign in to continue to ContestHub
+            </p>
           </div>
+
+          <form onSubmit={handleLogIn} className="space-y-4 sm:space-y-5">
+            <div className="form-control">
+              <label className="label py-1 sm:py-2">
+                <span className="label-text font-bold text-gray-700 dark:text-gray-300 text-sm sm:text-base">Email Address</span>
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 sm:pl-4 flex items-center pointer-events-none">
+                  <FaEnvelope className="text-gray-400 text-sm sm:text-base" />
+                </div>
+                <input
+                  type="email"
+                  name="email"
+                  required
+                  placeholder="Enter your email"
+                  className="input input-bordered w-full h-12 sm:h-14 pl-10 sm:pl-11 bg-gray-50 dark:bg-gray-800/50 dark:text-white dark:border-gray-700 focus:border-[#FFB703] transition-colors text-sm sm:text-base"
+                />
+              </div>
+            </div>
+
+            <div className="form-control">
+              <label className="label py-1 sm:py-2">
+                <span className="label-text font-bold text-gray-700 dark:text-gray-300 text-sm sm:text-base">Password</span>
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 sm:pl-4 flex items-center pointer-events-none">
+                  <FaLock className="text-gray-400 text-sm sm:text-base" />
+                </div>
+                <input
+                  type={display ? 'text' : 'password'}
+                  name="password"
+                  required
+                  placeholder="Enter your password"
+                  className="input input-bordered w-full h-12 sm:h-14 pl-10 sm:pl-11 pr-10 sm:pr-12 bg-gray-50 dark:bg-gray-800/50 dark:text-white dark:border-gray-700 focus:border-[#FFB703] transition-colors text-sm sm:text-base"
+                />
+                <button
+                  type="button"
+                  onClick={() => setDisplay(!display)}
+                  className="absolute inset-y-0 right-0 pr-3 sm:pr-4 flex items-center text-gray-500 hover:text-[#FFB703] transition-colors focus:outline-none"
+                >
+                  {display ? <FaEyeSlash className="text-base sm:text-lg" /> : <FaEye className="text-base sm:text-lg" />}
+                </button>
+              </div>
+            </div>
+
+            <button
+               type="submit"
+               className="btn bg-gradient-to-r from-[#FFB703] to-[#e5a400] hover:from-[#e5a400] hover:to-[#cc9300] text-gray-900 border-none w-full text-base sm:text-lg font-bold shadow-lg shadow-[#FFB703]/30 h-12 sm:h-14 rounded-xl mt-4 transition-transform active:scale-[0.98]"
+               disabled={loading}
+            >
+              {loading ? <ImSpinner9 className="animate-spin text-xl" /> : 'Sign In'}
+            </button>
+          </form>
+
+          <div className="mt-6 sm:mt-8 flex items-center gap-3 sm:gap-4">
+            <div className="h-px flex-1 bg-gray-200 dark:bg-gray-700"></div>    
+            <span className="text-xs sm:text-sm font-medium text-gray-400 uppercase tracking-wider">OR</span>
+            <div className="h-px flex-1 bg-gray-200 dark:bg-gray-700"></div>    
+          </div>
+
+          <button
+            onClick={googleLogin}
+            disabled={loading}
+            className="btn btn-outline w-full mt-4 sm:mt-6 flex items-center gap-2 sm:gap-3 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600 h-12 sm:h-14 rounded-xl group transition-all"
+          >
+            <FcGoogle className="text-xl sm:text-2xl group-hover:scale-110 transition-transform" />
+            <span className="font-semibold text-sm sm:text-base">Continue with Google</span>
+          </button>
+
+          <p className="mt-6 sm:mt-8 text-center text-xs sm:text-sm text-gray-600 dark:text-gray-400">
+            Don't have an account?{' '}
+            <Link to="/signup" className="text-[#FFB703] font-bold hover:underline">
+              Create one now
+            </Link>
+          </p>
         </div>
       </div>
     </div>

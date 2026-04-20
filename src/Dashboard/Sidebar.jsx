@@ -2,9 +2,8 @@ import { useContext, useState } from 'react';
 import { GrLogout } from 'react-icons/gr';
 import { BsFillHouseAddFill } from 'react-icons/bs';
 import { AiOutlineBars } from 'react-icons/ai';
-import { NavLink, useNavigate } from 'react-router'; 
+import { NavLink, useNavigate, Link } from 'react-router';
 import { SiTicktick } from 'react-icons/si';
-import { Link } from 'react-router';
 import { MdHomeWork, MdManageAccounts } from 'react-icons/md';
 import { AuthContext } from '../AuthProvider/AuthProvider';
 import Swal from 'sweetalert2/dist/sweetalert2.js';
@@ -21,19 +20,17 @@ const Sidebar = () => {
   const navigate = useNavigate();
 
   const [isPosition] = useRole();
-  console.log(isPosition);
 
   const handleToggle = () => {
     setActive(!isActive);
   };
 
   const handleLogout = () => {
-
     logout()
       .then(() => {
         Swal.fire({
           title: 'LogOut success',
-          text: 'You clicked the button!',
+          text: 'You have been logged out!',
           icon: 'success',
         });
         navigate('/');
@@ -49,23 +46,29 @@ const Sidebar = () => {
   };
 
   if (!user) {
-   
     return null;
   }
 
+  const navLinkClasses = ({ isActive }) =>
+    `flex items-center px-4 py-3 mb-2 rounded-xl transition-all duration-300 font-semibold group ${
+      isActive
+        ? 'bg-[#FFB703] text-gray-900 shadow-md shadow-[#FFB703]/20 translate-x-1'
+        : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white'
+    }`;
+
   return (
     <>
-      <div className="bg-gray-100 text-gray-800 flex justify-between md:hidden">
+      <div className="bg-white dark:bg-[#111827] text-gray-800 dark:text-white flex justify-between md:hidden border-b border-gray-200 dark:border-gray-800 shadow-sm fixed w-full z-20 top-0">
         <div>
           <div className="block cursor-pointer p-4 font-bold">
             <Link to="/">
               <div className="flex justify-center items-center gap-2">
                 <img
-                  src="https://i.ibb.co/7RVpQM8/community-06.png"
-                  alt=""
-                  className="w-12"
+                  src="https://i.ibb.co.com/1GyvJWD9/contesthub.png"
+                  alt="Logo"
+                  className="w-10 rounded-full"
                 />
-                <p className="text-[#0ecdb9] font-bold text-2xl">ContestHub</p>
+                <p className="text-[#FFB703] font-bold text-xl">Contest<span className="text-gray-900 dark:text-white">Hub</span></p> 
               </div>
             </Link>
           </div>
@@ -73,192 +76,117 @@ const Sidebar = () => {
 
         <button
           onClick={handleToggle}
-          className="mobile-menu-button p-4 focus:outline-none focus:bg-gray-200"
+          className="mobile-menu-button p-4 focus:outline-none hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg m-2 transition-colors"
         >
-          <AiOutlineBars className="h-7 w-7 text-[#0ecdb9]" />
+          <AiOutlineBars className="h-6 w-6 text-gray-800 dark:text-white" />
         </button>
       </div>
 
       <div
-        className={`z-10 md:fixed flex flex-col justify-between overflow-x-hidden bg-[#212529] text-white w-64 space-y-6 px-2 py-4 absolute inset-y-0 left-0 transform ${
+        className={`z-30 md:fixed flex flex-col justify-between bg-white dark:bg-[#111827] text-gray-800 dark:text-white w-64 lg:w-72 space-y-6 px-4 py-6 absolute inset-y-0 left-0 transform ${
           isActive && '-translate-x-full'
-        }  md:translate-x-0  transition duration-200 ease-in-out`}
+        } md:translate-x-0 transition duration-300 ease-in-out border-r border-gray-100 dark:border-gray-800 shadow-xl md:shadow-none h-screen overflow-y-auto mt-16 md:mt-0`}
       >
         <div>
-          <div>
-            <div className="w-full hidden md:flex px-4 py-2  rounded-lg justify-center items-center  mx-auto text-white">
+          <div className="mb-6">
+            <div className="w-full hidden md:flex py-2 px-2 rounded-2xl justify-center items-center mx-auto hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
               <Link to="/">
-                <div className="flex justify-center items-center gap-2">
+                <div className="flex justify-center items-center gap-3">        
                   <img
                     src="https://i.ibb.co.com/1GyvJWD9/contesthub.png"
-                    alt=""
-                    className="w-12 rounded-full"
+                    alt="Logo"
+                    className="w-12 rounded-full shadow-sm"
                   />
-                  <p className="text-[#FFB703] font-bold text-2xl">
-                    Contest<span className="text-white">Hub</span>
+                  <p className="text-[#FFB703] font-extrabold text-2xl tracking-tight">
+                    Contest<span className="text-gray-900 dark:text-white">Hub</span>
                   </p>
                 </div>
               </Link>
             </div>
-
-            <h1 className="capitalize text-center text-[#FFB703]">
-              {isPosition}
-            </h1>
+            
+            <div className="mt-6 flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-800/50 rounded-2xl border border-gray-100 dark:border-gray-800">
+                <img src={user?.photoURL || 'https://via.placeholder.com/100'} className="w-16 h-16 rounded-full border-2 border-white dark:border-[#111827] shadow-sm mb-2 object-cover" alt="Profile" />
+                <p className="font-bold text-gray-800 dark:text-white">{user?.displayName || 'User'}</p>
+                <div className="mt-1 px-3 py-1 bg-[#FFB703]/10 text-[#FFB703] text-xs font-bold uppercase rounded-full tracking-wider shadow-sm">
+                  {isPosition || 'Participant'}
+                </div>
+            </div>
           </div>
 
           <div className="flex flex-col justify-between flex-1 mt-6">
-            <nav>
+            <nav className="space-y-1">
               {isPosition === 'admin' && (
                 <>
-                  <NavLink
-                    to="/"
-                    className={({ isActive }) =>
-                      `flex items-center px-4 py-2 my-5  transition-colors duration-300 transform  hover:bg-gray-300   hover:text-gray-700 ${
-                        isActive ? 'bg-gray-300  text-gray-700' : 'text-white'
-                      }`
-                    }
-                  >
-                    <MdHomeWork className="w-5 h-5" />
-
-                    <span className="mx-4 font-medium">Home</span>
+                  <NavLink to="/" className={navLinkClasses}>
+                    <MdHomeWork className="w-5 h-5 shrink-0" />
+                    <span className="mx-4">Home</span>
                   </NavLink>
 
-                  <NavLink
-                    to="/dashBoard/myProfile"
-                    className={({ isActive }) =>
-                      `flex items-center px-4 py-2 my-5  transition-colors duration-300 transform  hover:bg-gray-300   hover:text-gray-700 ${
-                        isActive ? 'bg-gray-300  text-gray-700' : 'text-white'
-                      }`
-                    }
-                  >
-                    <FaUser className="w-5 h-5" />
-
-                    <span className="mx-4 font-medium">My Profile</span>
-                  </NavLink>
-                  <NavLink
-                    to="/dashboard/ManageUser"
-                    end
-                    className={({ isActive }) =>
-                      `flex items-center px-4 py-2 my-5  transition-colors duration-300 transform  hover:bg-gray-300   hover:text-gray-700 ${
-                        isActive ? 'bg-gray-300  text-gray-700' : 'text-white'
-                      }`
-                    }
-                  >
-                    <MdManageAccounts className="w-5 h-5" />
-
-                    <span className="mx-4 font-medium">Manage User</span>
+                  <NavLink to="/dashBoard/myProfile" className={navLinkClasses}>
+                    <FaUser className="w-5 h-5 shrink-0" />
+                    <span className="mx-4">My Profile</span>        
                   </NavLink>
 
-                  <NavLink
-                    to="/dashboard/ManageContests"
-                    className={({ isActive }) =>
-                      `flex items-center px-4 py-2 my-5  transition-colors duration-300 transform  hover:bg-gray-300   hover:text-gray-700 ${
-                        isActive ? 'bg-gray-300  text-gray-700' : 'text-white'
-                      }`
-                    }
-                  >
-                    <BsFillHouseAddFill className="w-5 h-5" />
+                  <NavLink to="/dashboard/ManageUser" end className={navLinkClasses}>
+                    <MdManageAccounts className="w-5 h-5 shrink-0" />
+                    <span className="mx-4">Manage User</span>       
+                  </NavLink>
 
-                    <span className="mx-4 font-medium">Manage Contests</span>
+                  <NavLink to="/dashboard/ManageContests" className={navLinkClasses}>
+                    <BsFillHouseAddFill className="w-5 h-5 shrink-0" />
+                    <span className="mx-4">Manage Contests</span>   
                   </NavLink>
                 </>
               )}
 
               {(isPosition === 'host' || isPosition === 'admin') && (
                 <>
-                  <NavLink
-                    to="/dashboard/AddContest"
-                    className={({ isActive }) =>
-                      `flex items-center px-4 py-2 my-5  transition-colors duration-300 transform  hover:bg-gray-300   hover:text-gray-700 ${
-                        isActive ? 'bg-gray-300  text-gray-700' : 'text-white'
-                      }`
-                    }
-                  >
-                    <IoIosAddCircle className="w-5 h-5" />
-
-                    <span className="mx-4 font-medium">Add Contest</span>
+                  <NavLink to="/dashboard/AddContest" className={navLinkClasses}>
+                    <IoIosAddCircle className="w-5 h-5 shrink-0" />
+                    <span className="mx-4">Add Contest</span>       
                   </NavLink>
-                  <NavLink
-                    to="/dashboard/myContest"
-                    className={({ isActive }) =>
-                      `flex items-center px-4 py-2 my-5  transition-colors duration-300 transform  hover:bg-gray-300   hover:text-gray-700 ${
-                        isActive ? 'bg-gray-300  text-gray-700' : 'text-white'
-                      }`
-                    }
-                  >
-                    <FaClipboardList className="w-5 h-5" />
-
-                    <span className="mx-4 font-medium">Created Contest</span>
+                  
+                  <NavLink to="/dashboard/myContest" className={navLinkClasses}>
+                    <FaClipboardList className="w-5 h-5 shrink-0" />
+                    <span className="mx-4">Created Contest</span>   
                   </NavLink>
-                  <NavLink
-                    to="/dashboard/submitted"
-                    className={({ isActive }) =>
-                      `flex items-center px-4 py-2 my-5  transition-colors duration-300 transform  hover:bg-gray-300   hover:text-gray-700 ${
-                        isActive ? 'bg-gray-300  text-gray-700' : 'text-white'
-                      }`
-                    }
-                  >
-                    <SiTicktick className="w-5 h-5" />
 
-                    <span className="mx-4 font-medium">Contest Submitted</span>
+                  <NavLink to="/dashboard/submitted" className={navLinkClasses}>
+                    <SiTicktick className="w-5 h-5 shrink-0" />
+                    <span className="mx-4">Contest Submitted</span> 
                   </NavLink>
                 </>
               )}
 
               {isPosition === 'user' && (
                 <>
-                  <NavLink
-                    to="/dashboard/participate"
-                    className={({ isActive }) =>
-                      `flex items-center px-4 py-2 my-5  transition-colors duration-300 transform  hover:bg-gray-300   hover:text-gray-700 ${
-                        isActive ? 'bg-gray-300  text-gray-700' : 'text-white'
-                      }`
-                    }
-                  >
-                    <RiStickyNote2Fill className="w-5 h-5" />
-
-                    <span className="mx-4 font-medium">
-                      Participated Contest
-                    </span>
+                  <NavLink to="/dashboard/participate" className={navLinkClasses}>
+                    <RiStickyNote2Fill className="w-5 h-5 shrink-0" />
+                    <span className="mx-4">Participated Contest</span>
                   </NavLink>
-                  <NavLink
-                    to="/dashboard/WinningContest"
-                    className={({ isActive }) =>
-                      `flex items-center px-4 py-2 my-5  transition-colors duration-300 transform  hover:bg-gray-300   hover:text-gray-700 ${
-                        isActive ? 'bg-gray-300  text-gray-700' : 'text-white'
-                      }`
-                    }
-                  >
-                    <TfiCup className="w-5 h-5" />
 
-                    <span className="mx-4 font-medium">Winning Contest</span>
+                  <NavLink to="/dashboard/WinningContest" className={navLinkClasses}>
+                    <TfiCup className="w-5 h-5 shrink-0" />
+                    <span className="mx-4">Winning Contest</span>   
                   </NavLink>
-                  <NavLink
-                    to="/dashBoard/myProfile"
-                    className={({ isActive }) =>
-                      `flex items-center px-4 py-2 my-5  transition-colors duration-300 transform  hover:bg-gray-300   hover:text-gray-700 ${
-                        isActive ? 'bg-gray-300  text-gray-700' : 'text-white'
-                      }`
-                    }
-                  >
-                    <FaUser className="w-5 h-5" />
 
-                    <span className="mx-4 font-medium">My Profile</span>
+                  <NavLink to="/dashBoard/myProfile" className={navLinkClasses}>
+                    <FaUser className="w-5 h-5 shrink-0" />
+                    <span className="mx-4">My Profile</span>        
                   </NavLink>
                 </>
               )}
             </nav>
           </div>
         </div>
-        <div>
-          <hr />
+        
+        <div className="pt-4 border-t border-gray-100 dark:border-gray-800 mt-6">
           <button
             onClick={handleLogout}
-            className="flex w-full items-center px-4 py-2 mt-5 text-[white] hover:bg-gray-300   hover:text-gray-700 transition-colors duration-300 transform"
+            className="flex w-full items-center px-4 py-3 rounded-xl font-bold text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-300 group"   
           >
-            <GrLogout className="w-5 h-5" />
-
-            <span className="mx-4 font-medium">Logout</span>
+            <GrLogout className="w-5 h-5 shrink-0 group-hover:-translate-x-1 transition-transform" />
+            <span className="mx-4">Logout</span>
           </button>
         </div>
       </div>
